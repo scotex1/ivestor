@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Market News — FinVest Pro</title>
+  <link rel="stylesheet" href="../assets/css/style.css">
+</head>
+<body>
+<nav class="navbar">
+  <a href="../dashboard/dashboard.html" class="navbar-logo"><div class="logo-icon">📈</div>FinVest Pro</a>
+  <div class="navbar-actions"><a href="../dashboard/dashboard.html" class="btn btn-ghost btn-sm">← Dashboard</a><button id="logout-btn" class="btn btn-ghost btn-sm">⏏</button></div>
+</nav>
+
+<div class="layout-dashboard">
+  <aside class="sidebar">
+    <div class="sidebar-section"><a href="../dashboard/dashboard.html" class="sidebar-link"><span class="icon">🏠</span> Dashboard</a></div>
+    <div class="sidebar-section">
+      <div class="sidebar-label">Engines</div>
+      <a href="risk-profile.html" class="sidebar-link"><span class="icon">📊</span> Risk Profiler</a>
+      <a href="news.html" class="sidebar-link active"><span class="icon">📰</span> Market News</a>
+      <a href="goal-planner.html" class="sidebar-link" data-engine="goal-planner"><span class="icon">🎯</span> Goal Planner</a>
+      <a href="retirement.html" class="sidebar-link" data-engine="retirement"><span class="icon">🏖️</span> Retirement</a>
+      <a href="stock-analysis.html" class="sidebar-link" data-engine="stock-analysis"><span class="icon">📈</span> Stock Analysis</a>
+      <a href="portfolio.html" class="sidebar-link" data-engine="portfolio"><span class="icon">💼</span> Portfolio</a>
+      <a href="global-events.html" class="sidebar-link" data-engine="global-events"><span class="icon">🌐</span> Global Events</a>
+    </div>
+  </aside>
+
+  <main class="main-content">
+    <div style="margin-bottom:24px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;">
+      <div>
+        <div class="badge badge-green" style="margin-bottom:10px;">📰 Free Engine</div>
+        <h2 style="font-size:1.5rem;margin-bottom:4px;">Market News</h2>
+        <p style="color:var(--text-secondary);font-size:0.85rem;">AI-curated financial news for Indian investors</p>
+      </div>
+      <button class="btn btn-outline btn-sm" onclick="loadNews()">↻ Refresh</button>
+    </div>
+
+    <!-- Category Filter -->
+    <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:24px;">
+      <button class="btn btn-primary btn-sm" onclick="filterNews('all', this)">All News</button>
+      <button class="btn btn-ghost btn-sm" onclick="filterNews('market', this)">📊 Markets</button>
+      <button class="btn btn-ghost btn-sm" onclick="filterNews('stocks', this)">📈 Stocks</button>
+      <button class="btn btn-ghost btn-sm" onclick="filterNews('mutual-funds', this)">💼 Mutual Funds</button>
+      <button class="btn btn-ghost btn-sm" onclick="filterNews('economy', this)">🏛️ Economy</button>
+      <button class="btn btn-ghost btn-sm" onclick="filterNews('global', this)">🌐 Global</button>
+    </div>
+
+    <!-- Market Ticker -->
+    <div style="background:var(--bg-secondary);border:1px solid var(--border);border-radius:var(--radius-md);padding:16px;margin-bottom:24px;display:flex;gap:24px;overflow-x:auto;">
+      <div style="flex-shrink:0;text-align:center;min-width:90px;">
+        <div style="font-size:0.7rem;color:var(--text-muted);">SENSEX</div>
+        <div style="font-family:var(--font-mono);font-weight:600;font-size:1rem;">74,320</div>
+        <div style="font-size:0.75rem;color:var(--accent-green);">▲ 0.45%</div>
+      </div>
+      <div style="flex-shrink:0;text-align:center;min-width:90px;">
+        <div style="font-size:0.7rem;color:var(--text-muted);">NIFTY 50</div>
+        <div style="font-family:var(--font-mono);font-weight:600;font-size:1rem;">22,510</div>
+        <div style="font-size:0.75rem;color:var(--accent-green);">▲ 0.38%</div>
+      </div>
+      <div style="flex-shrink:0;text-align:center;min-width:90px;">
+        <div style="font-size:0.7rem;color:var(--text-muted);">BANK NIFTY</div>
+        <div style="font-family:var(--font-mono);font-weight:600;font-size:1rem;">48,120</div>
+        <div style="font-size:0.75rem;color:var(--accent-red);">▼ 0.12%</div>
+      </div>
+      <div style="flex-shrink:0;text-align:center;min-width:90px;">
+        <div style="font-size:0.7rem;color:var(--text-muted);">GOLD (10g)</div>
+        <div style="font-family:var(--font-mono);font-weight:600;font-size:1rem;">₹73,400</div>
+        <div style="font-size:0.75rem;color:var(--accent-green);">▲ 0.22%</div>
+      </div>
+      <div style="flex-shrink:0;text-align:center;min-width:90px;">
+        <div style="font-size:0.7rem;color:var(--text-muted);">USD/INR</div>
+        <div style="font-family:var(--font-mono);font-weight:600;font-size:1rem;">83.42</div>
+        <div style="font-size:0.75rem;color:var(--text-muted);">Stable</div>
+      </div>
+      <div style="flex-shrink:0;font-size:0.7rem;color:var(--text-muted);align-self:center;white-space:nowrap;">Live prices — updated every 15 min</div>
+    </div>
+
+    <!-- News List -->
+    <div id="news-loading" style="text-align:center;padding:60px;color:var(--text-muted);">
+      <span class="spinner" style="width:32px;height:32px;border-width:3px;"></span>
+      <div style="margin-top:12px;font-size:0.88rem;">Loading news...</div>
+    </div>
+
+    <div id="news-list" style="display:none;display:flex;flex-direction:column;gap:16px;"></div>
+  </main>
+</div>
+
+<div id="toast-container" class="toast-container"></div>
+<script src="../assets/js/api.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+<script src="../assets/js/auth.js"></script>
+<script src="../assets/js/dashboard.js"></script>
+<script>
+let allNews = [];
+let activeCategory = "all";
+
+document.addEventListener("DOMContentLoaded", () => {
+  if (!requireAuth()) return;
+  setupSidebarLinks();
+  loadNews();
+});
+
+async function loadNews() {
+  document.getElementById("news-loading").style.display = "block";
+  document.getElementById("news-list").style.display = "none";
+
+  try {
+    const token = getStoredToken();
+    const data = await API.getNews(token);
+    allNews = data?.news || getDemoNews();
+  } catch {
+    allNews = getDemoNews();
+  } finally {
+    document.getElementById("news-loading").style.display = "none";
+    renderNews(allNews);
+  }
+}
+
+function filterNews(cat, btn) {
+  activeCategory = cat;
+  document.querySelectorAll(".sidebar, main").forEach(() => {});
+  // Update button styles
+  document.querySelectorAll("main .btn").forEach(b => {
+    if (b.getAttribute("onclick")?.includes("filterNews")) {
+      b.className = "btn btn-ghost btn-sm";
+    }
+  });
+  if (btn) btn.className = "btn btn-primary btn-sm";
+
+  const filtered = cat === "all" ? allNews : allNews.filter(n => n.category === cat);
+  renderNews(filtered);
+}
+
+function renderNews(news) {
+  const list = document.getElementById("news-list");
+  list.style.display = "flex";
+
+  if (!news.length) {
+    list.innerHTML = `<div style="text-align:center;padding:40px;color:var(--text-muted);">No news in this category</div>`;
+    return;
+  }
+
+  list.innerHTML = news.map(n => `
+    <a href="${n.url || '#'}" target="_blank" style="text-decoration:none;display:block;" class="card">
+      <div style="display:flex;align-items:flex-start;gap:16px;">
+        <div style="flex:1;">
+          <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px;flex-wrap:wrap;">
+            <span class="badge badge-gray" style="font-size:0.7rem;">${getCatIcon(n.category)} ${n.category || "Markets"}</span>
+            <span style="font-size:0.75rem;color:var(--text-muted);font-family:var(--font-mono);">${n.source}</span>
+            <span style="font-size:0.75rem;color:var(--text-muted);">${n.time_ago || "2h ago"}</span>
+          </div>
+          <h3 style="font-size:0.97rem;color:var(--text-primary);margin-bottom:8px;line-height:1.5;">${n.title}</h3>
+          <p style="font-size:0.83rem;color:var(--text-secondary);line-height:1.6;">${n.summary || ""}</p>
+        </div>
+        <div style="font-size:1.5rem;flex-shrink:0;">${getSentimentIcon(n.sentiment)}</div>
+      </div>
+    </a>
+  `).join("");
+}
+
+function getCatIcon(cat) {
+  const icons = { market: "📊", stocks: "📈", "mutual-funds": "💼", economy: "🏛️", global: "🌐" };
+  return icons[cat] || "📰";
+}
+
+function getSentimentIcon(s) {
+  if (s === "positive") return "🟢";
+  if (s === "negative") return "🔴";
+  return "⚪";
+}
+
+function getDemoNews() {
+  return [
+    { title: "RBI Keeps Repo Rate Unchanged at 6.5% in Latest MPC Meeting", summary: "The Monetary Policy Committee voted unanimously to hold rates, citing balanced inflation risks and supporting economic growth momentum.", source: "Economic Times", time_ago: "1h ago", category: "economy", sentiment: "positive" },
+    { title: "Nifty 50 Hits New High as FII Buying Returns in Large Cap Stocks", summary: "Foreign institutional investors turned net buyers after three weeks of selling, injecting ₹4,200 crore into Indian equities.", source: "Business Standard", time_ago: "2h ago", category: "market", sentiment: "positive" },
+    { title: "TCS Reports Strong Q3 Results, Revenue Up 8.2% YoY", summary: "Tata Consultancy Services beat analyst estimates with deal wins across BFSI and healthcare verticals. Management guides for stable growth in Q4.", source: "Mint", time_ago: "4h ago", category: "stocks", sentiment: "positive" },
+    { title: "SEBI Proposes Stricter Norms for Equity Mutual Fund Categorization", summary: "The market regulator has proposed reclassifying mid and small cap fund exposure limits to better protect retail investors.", source: "SEBI Bulletin", time_ago: "5h ago", category: "mutual-funds", sentiment: "neutral" },
+    { title: "US Fed Signals Possible Rate Cut in Second Half of 2025", summary: "Federal Reserve minutes indicate policymakers are watching inflation data closely before committing to easing. Impact on EM flows expected.", source: "Bloomberg", time_ago: "6h ago", category: "global", sentiment: "positive" },
+    { title: "Adani Group Stocks Rally After MSCI Review Retains Weightage", summary: "The MSCI's decision to maintain index weightage for Adani group companies triggered a sharp rally across the conglomerate's listed entities.", source: "NSE Market Watch", time_ago: "8h ago", category: "stocks", sentiment: "positive" },
+    { title: "Gold Prices Hit ₹73,400/10g as Geopolitical Tensions Rise", summary: "Safe-haven demand drove gold to fresh highs in domestic markets, with analysts targeting ₹75,000 levels in near term.", source: "CNBC TV18", time_ago: "10h ago", category: "market", sentiment: "positive" },
+    { title: "India's CPI Inflation Drops to 4.8% in December 2024", summary: "Consumer price inflation eased on falling vegetable prices, coming within RBI's comfort zone and strengthening the case for rate cuts.", source: "MoSPI", time_ago: "12h ago", category: "economy", sentiment: "positive" }
+  ];
+}
+</script>
+</body>
+</html>
