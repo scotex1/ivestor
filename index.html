@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FinVest Pro — AI-Powered Financial Intelligence</title>
+  <meta name="description" content="Professional financial tools for Indian investors. Risk profiling, goal planning, stock analysis, and more — all in one dashboard.">
+  <link rel="stylesheet" href="assets/css/style.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>📈</text></svg>">
+</head>
+<body>
+
+<!-- Navbar -->
+<nav class="navbar">
+  <a href="index.html" class="navbar-logo">
+    <div class="logo-icon">📈</div>
+    FinVest Pro
+  </a>
+
+  <ul class="navbar-links">
+    <li><a href="index.html" class="active">Home</a></li>
+    <li><a href="pricing.html">Pricing</a></li>
+    <li><a href="about.html">About</a></li>
+    <li><a href="testimonials.html">Reviews</a></li>
+    <li><a href="contact.html">Contact</a></li>
+  </ul>
+
+  <div class="navbar-actions">
+    <a href="auth/login.html" class="btn btn-ghost btn-sm">Login</a>
+    <a href="auth/signup.html" class="btn btn-primary btn-sm">Get Started Free</a>
+  </div>
+</nav>
+
+<!-- Hero Section -->
+<section class="hero">
+  <div class="hero-orb hero-orb-1"></div>
+  <div class="hero-orb hero-orb-2"></div>
+
+  <div class="container" style="position:relative;z-index:1;">
+    <div style="max-width:760px;margin:0 auto;text-align:center;">
+      <div class="section-label" style="justify-content:center;" data-aos="fade-up">
+        Built for Indian Investors
+      </div>
+
+      <h1 class="display-font fade-in" style="margin-bottom:24px;line-height:1.15;">
+        Your Complete<br>
+        <span style="background:linear-gradient(135deg,var(--gold),var(--gold-light));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">Financial Intelligence</span><br>
+        Platform
+      </h1>
+
+      <p class="fade-in fade-in-delay-1" style="font-size:1.15rem;color:var(--text-secondary);max-width:560px;margin:0 auto 40px;line-height:1.7;">
+        7 AI-powered engines to analyze risk, plan goals, track stocks, and optimize your portfolio — all in one professional dashboard.
+      </p>
+
+      <div class="flex-center gap-16 fade-in fade-in-delay-2" style="flex-wrap:wrap;">
+        <a href="auth/signup.html" class="btn btn-primary btn-lg">
+          Start Free — No Credit Card
+        </a>
+        <a href="pricing.html" class="btn btn-outline btn-lg">
+          View Pricing
+        </a>
+      </div>
+
+      <!-- Trust indicators -->
+      <div class="fade-in fade-in-delay-3" style="margin-top:48px;display:flex;align-items:center;justify-content:center;gap:32px;flex-wrap:wrap;">
+        <div style="display:flex;align-items:center;gap:8px;color:var(--text-muted);font-size:0.85rem;">
+          <span style="color:var(--accent-green);">✓</span> NSE/BSE Data
+        </div>
+        <div style="display:flex;align-items:center;gap:8px;color:var(--text-muted);font-size:0.85rem;">
+          <span style="color:var(--accent-green);">✓</span> Bank-grade Security
+        </div>
+        <div style="display:flex;align-items:center;gap:8px;color:var(--text-muted);font-size:0.85rem;">
+          <span style="color:var(--accent-green);">✓</span> SEBI Compliant Data
+        </div>
+        <div style="display:flex;align-items:center;gap:8px;color:var(--text-muted);font-size:0.85rem;">
+          <span style="color:var(--accent-green);">✓</span> 2,000+ Users
+        </div>
+      </div>
+    </div>
+
+    <!-- Dashboard Preview -->
+    <div style="margin-top:64px;border:1px solid var(--border-gold);border-radius:var(--radius-xl);overflow:hidden;box-shadow:0 40px 80px rgba(0,0,0,0.5),var(--shadow-glow);background:var(--bg-card);max-width:900px;margin:64px auto 0;">
+      <!-- Fake browser bar -->
+      <div style="background:var(--bg-secondary);border-bottom:1px solid var(--border);padding:12px 20px;display:flex;align-items:center;gap:8px;">
+        <span style="width:10px;height:10px;border-radius:50%;background:#EF4444;display:inline-block;"></span>
+        <span style="width:10px;height:10px;border-radius:50%;background:#F59E0B;display:inline-block;"></span>
+        <span style="width:10px;height:10px;border-radius:50%;background:#22C55E;display:inline-block;"></span>
+        <div style="flex:1;background:var(--bg-primary);border-radius:4px;padding:4px 14px;font-size:0.78rem;color:var(--text-muted);margin-left:12px;font-family:var(--font-mono);">
+          app.finvestpro.in/dashboard
+        </div>
+      </div>
+      <!-- Dashboard preview content -->
+      <div style="padding:24px;display:grid;grid-template-columns:repeat(3,1fr);gap:16px;">
+        <div class="stat-card" style="background:var(--bg-secondary);">
+          <div class="stat-label">Portfolio Value</div>
+          <div class="stat-value" style="font-size:1.5rem;">₹2.84L</div>
+          <div class="stat-change" style="color:var(--accent-green);">↑ 3.2%</div>
+        </div>
+        <div class="stat-card" style="background:var(--bg-secondary);">
+          <div class="stat-label">Risk Score</div>
+          <div class="stat-value" style="font-size:1.5rem;">72/100</div>
+          <div class="stat-change" style="color:var(--gold);">Moderate-Aggressive</div>
+        </div>
+        <div class="stat-card" style="background:var(--bg-secondary);">
+          <div class="stat-label">Goals On Track</div>
+          <div class="stat-value" style="font-size:1.5rem;">3 / 4</div>
+          <div class="stat-change" style="color:var(--accent-green);">75% complete</div>
+        </div>
+      </div>
+      <div style="padding:0 24px 24px;display:grid;grid-template-columns:repeat(4,1fr);gap:12px;">
+        <div style="background:var(--bg-secondary);border:1px solid var(--border-gold);border-radius:var(--radius-md);padding:16px;text-align:center;">
+          <div style="font-size:1.5rem;margin-bottom:6px;">📊</div>
+          <div style="font-size:0.78rem;font-weight:600;color:var(--gold);">Risk Profiler</div>
+          <div class="badge badge-green" style="margin-top:6px;font-size:0.65rem;">Active</div>
+        </div>
+        <div style="background:var(--bg-secondary);border:1px solid var(--border);border-radius:var(--radius-md);padding:16px;text-align:center;">
+          <div style="font-size:1.5rem;margin-bottom:6px;">🎯</div>
+          <div style="font-size:0.78rem;font-weight:600;color:var(--text-secondary);">Goal Planner</div>
+          <div class="badge badge-green" style="margin-top:6px;font-size:0.65rem;">Active</div>
+        </div>
+        <div style="background:var(--bg-secondary);border:1px solid var(--border);border-radius:var(--radius-md);padding:16px;text-align:center;opacity:0.5;">
+          <div style="font-size:1.5rem;margin-bottom:6px;">📈</div>
+          <div style="font-size:0.78rem;font-weight:600;color:var(--text-muted);">Stock Analysis</div>
+          <div class="badge badge-lock" style="margin-top:6px;font-size:0.65rem;">🔒 Pro</div>
+        </div>
+        <div style="background:var(--bg-secondary);border:1px solid var(--border);border-radius:var(--radius-md);padding:16px;text-align:center;opacity:0.5;">
+          <div style="font-size:1.5rem;margin-bottom:6px;">💼</div>
+          <div style="font-size:0.78rem;font-weight:600;color:var(--text-muted);">Portfolio</div>
+          <div class="badge badge-lock" style="margin-top:6px;font-size:0.65rem;">🔒 Pro</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Engines Section -->
+<section class="section">
+  <div class="container">
+    <div class="text-center" style="margin-bottom:56px;">
+      <div class="section-label" style="justify-content:center;">7 Powerful Engines</div>
+      <h2>Everything you need to invest<br>with confidence</h2>
+    </div>
+
+    <div class="engine-grid">
+      <div class="card card-gold">
+        <div class="engine-icon" style="background:rgba(201,168,76,0.1);border-color:rgba(201,168,76,0.3);">📊</div>
+        <div class="engine-name">Risk Profiler</div>
+        <div class="engine-desc">Discover your investment personality and risk tolerance with our scientifically-designed questionnaire.</div>
+        <div class="mt-16"><span class="badge badge-green">Free</span></div>
+      </div>
+
+      <div class="card">
+        <div class="engine-icon" style="background:rgba(6,182,212,0.1);border-color:rgba(6,182,212,0.3);">📰</div>
+        <div class="engine-name">Market News</div>
+        <div class="engine-desc">Curated, AI-filtered financial news from trusted Indian and global sources. No noise, just signal.</div>
+        <div class="mt-16"><span class="badge badge-green">Free</span></div>
+      </div>
+
+      <div class="card">
+        <div class="engine-icon" style="background:rgba(34,197,94,0.1);border-color:rgba(34,197,94,0.3);">🎯</div>
+        <div class="engine-name">Goal Planner</div>
+        <div class="engine-desc">Set financial goals — home, education, retirement — and get a month-by-month investment roadmap.</div>
+        <div class="mt-16"><span class="badge badge-blue">Basic+</span></div>
+      </div>
+
+      <div class="card">
+        <div class="engine-icon" style="background:rgba(167,139,250,0.1);border-color:rgba(167,139,250,0.3);">🏖️</div>
+        <div class="engine-name">Retirement Planner</div>
+        <div class="engine-desc">Calculate your corpus target, required SIP, and retirement timeline based on your lifestyle goals.</div>
+        <div class="mt-16"><span class="badge badge-blue">Basic+</span></div>
+      </div>
+
+      <div class="card">
+        <div class="engine-icon" style="background:rgba(245,158,11,0.1);border-color:rgba(245,158,11,0.3);">📈</div>
+        <div class="engine-name">Stock Analysis</div>
+        <div class="engine-desc">Deep fundamental + technical analysis for NSE/BSE stocks. P/E ratios, earnings trends, buy/sell signals.</div>
+        <div class="mt-16"><span class="badge badge-gold">Pro+</span></div>
+      </div>
+
+      <div class="card">
+        <div class="engine-icon" style="background:rgba(236,72,153,0.1);border-color:rgba(236,72,153,0.3);">💼</div>
+        <div class="engine-name">Portfolio Optimizer</div>
+        <div class="engine-desc">Build and rebalance a diversified portfolio using Modern Portfolio Theory tailored to your risk profile.</div>
+        <div class="mt-16"><span class="badge badge-gold">Pro+</span></div>
+      </div>
+
+      <div class="card">
+        <div class="engine-icon" style="background:rgba(59,130,246,0.1);border-color:rgba(59,130,246,0.3);">🌐</div>
+        <div class="engine-name">Global Events Tracker</div>
+        <div class="engine-desc">Monitor geopolitical events, Fed decisions, and macro trends and understand how they impact your investments.</div>
+        <div class="mt-16"><span class="badge badge-gold">Pro+</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- How It Works -->
+<section class="section" style="background:var(--bg-secondary);border-top:1px solid var(--border);border-bottom:1px solid var(--border);">
+  <div class="container">
+    <div class="text-center" style="margin-bottom:56px;">
+      <div class="section-label" style="justify-content:center;">Simple Process</div>
+      <h2>From signup to financial clarity<br>in 4 steps</h2>
+    </div>
+
+    <div class="grid-4">
+      <div style="text-align:center;padding:24px 16px;">
+        <div style="width:56px;height:56px;background:var(--gold-dim);border:1px solid var(--border-gold);border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:var(--font-mono);font-weight:700;color:var(--gold);font-size:1.1rem;margin:0 auto 20px;">01</div>
+        <h3 style="margin-bottom:10px;font-size:1rem;">Sign Up Free</h3>
+        <p style="font-size:0.85rem;color:var(--text-secondary);">Create your account in under 60 seconds. No credit card required.</p>
+      </div>
+
+      <div style="text-align:center;padding:24px 16px;">
+        <div style="width:56px;height:56px;background:var(--gold-dim);border:1px solid var(--border-gold);border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:var(--font-mono);font-weight:700;color:var(--gold);font-size:1.1rem;margin:0 auto 20px;">02</div>
+        <h3 style="margin-bottom:10px;font-size:1rem;">Take Risk Profile</h3>
+        <p style="font-size:0.85rem;color:var(--text-secondary);">Answer 10 questions. Get your personalized investor profile instantly.</p>
+      </div>
+
+      <div style="text-align:center;padding:24px 16px;">
+        <div style="width:56px;height:56px;background:var(--gold-dim);border:1px solid var(--border-gold);border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:var(--font-mono);font-weight:700;color:var(--gold);font-size:1.1rem;margin:0 auto 20px;">03</div>
+        <h3 style="margin-bottom:10px;font-size:1rem;">Explore Engines</h3>
+        <p style="font-size:0.85rem;color:var(--text-secondary);">Use free tools or upgrade to unlock premium financial engines.</p>
+      </div>
+
+      <div style="text-align:center;padding:24px 16px;">
+        <div style="width:56px;height:56px;background:var(--gold-dim);border:1px solid var(--border-gold);border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:var(--font-mono);font-weight:700;color:var(--gold);font-size:1.1rem;margin:0 auto 20px;">04</div>
+        <h3 style="margin-bottom:10px;font-size:1rem;">Invest Smarter</h3>
+        <p style="font-size:0.85rem;color:var(--text-secondary);">Get data-driven insights to make confident investment decisions.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Testimonials Teaser -->
+<section class="section">
+  <div class="container">
+    <div class="text-center" style="margin-bottom:48px;">
+      <div class="section-label" style="justify-content:center;">Real Investors, Real Results</div>
+      <h2>Loved by 2,000+ investors<br>across India</h2>
+    </div>
+
+    <div class="grid-3">
+      <div class="card card-gold">
+        <div style="display:flex;gap:4px;margin-bottom:14px;">★★★★★</div>
+        <p style="color:var(--text-secondary);font-size:0.9rem;line-height:1.7;margin-bottom:20px;">
+          "The stock analysis engine alone is worth the Pro subscription. Saves me hours of research every week."
+        </p>
+        <div style="display:flex;align-items:center;gap:12px;">
+          <div style="width:36px;height:36px;border-radius:50%;background:var(--gold-dim);display:flex;align-items:center;justify-content:center;color:var(--gold);font-weight:700;">R</div>
+          <div>
+            <div style="font-weight:600;font-size:0.88rem;">Rahul Sharma</div>
+            <div style="color:var(--text-muted);font-size:0.78rem;">Software Engineer, Bangalore</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div style="display:flex;gap:4px;margin-bottom:14px;color:var(--gold);">★★★★★</div>
+        <p style="color:var(--text-secondary);font-size:0.9rem;line-height:1.7;margin-bottom:20px;">
+          "Finally a platform designed for Indian investors, not just copy-pasted from US tools. The retirement planner is excellent."
+        </p>
+        <div style="display:flex;align-items:center;gap:12px;">
+          <div style="width:36px;height:36px;border-radius:50%;background:rgba(59,130,246,0.1);display:flex;align-items:center;justify-content:center;color:var(--accent-blue);font-weight:700;">P</div>
+          <div>
+            <div style="font-weight:600;font-size:0.88rem;">Priya Mehta</div>
+            <div style="color:var(--text-muted);font-size:0.78rem;">CA, Mumbai</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div style="display:flex;gap:4px;margin-bottom:14px;color:var(--gold);">★★★★☆</div>
+        <p style="color:var(--text-secondary);font-size:0.9rem;line-height:1.7;margin-bottom:20px;">
+          "The goal planner helped me structure my SIPs properly for the first time. My financial planning has improved dramatically."
+        </p>
+        <div style="display:flex;align-items:center;gap:12px;">
+          <div style="width:36px;height:36px;border-radius:50%;background:rgba(34,197,94,0.1);display:flex;align-items:center;justify-content:center;color:var(--accent-green);font-weight:700;">A</div>
+          <div>
+            <div style="font-weight:600;font-size:0.88rem;">Ankit Verma</div>
+            <div style="color:var(--text-muted);font-size:0.78rem;">Entrepreneur, Delhi</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="text-center mt-32">
+      <a href="testimonials.html" class="btn btn-ghost">Read All Reviews →</a>
+    </div>
+  </div>
+</section>
+
+<!-- CTA Section -->
+<section class="section" style="background:linear-gradient(135deg,rgba(201,168,76,0.06) 0%,transparent 100%);border-top:1px solid var(--border-gold);">
+  <div class="container">
+    <div class="text-center" style="max-width:560px;margin:0 auto;">
+      <h2 class="display-font" style="margin-bottom:16px;">
+        Ready to invest<br>with intelligence?
+      </h2>
+      <p style="color:var(--text-secondary);margin-bottom:36px;font-size:1rem;">
+        Join 2,000+ Indian investors using FinVest Pro to make data-driven investment decisions.
+      </p>
+      <a href="auth/signup.html" class="btn btn-primary btn-lg">
+        Create Your Free Account
+      </a>
+      <div style="margin-top:16px;font-size:0.82rem;color:var(--text-muted);">
+        Free forever. No credit card required.
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div>
+        <a href="index.html" class="navbar-logo" style="display:inline-flex;margin-bottom:12px;">
+          <div class="logo-icon">📈</div>
+          FinVest Pro
+        </a>
+        <p class="footer-brand-desc">
+          AI-powered financial intelligence platform for Indian investors. Make smarter decisions with data, not guesswork.
+        </p>
+      </div>
+
+      <div>
+        <div class="footer-title">Product</div>
+        <ul class="footer-links">
+          <li><a href="pricing.html">Pricing</a></li>
+          <li><a href="about.html">About Us</a></li>
+          <li><a href="testimonials.html">Reviews</a></li>
+          <li><a href="auth/signup.html">Get Started</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <div class="footer-title">Legal</div>
+        <ul class="footer-links">
+          <li><a href="legal/privacy-policy.html">Privacy Policy</a></li>
+          <li><a href="legal/terms.html">Terms of Service</a></li>
+          <li><a href="legal/refund-policy.html">Refund Policy</a></li>
+          <li><a href="legal/support.html">Support</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <div class="footer-title">Contact</div>
+        <ul class="footer-links">
+          <li><a href="contact.html">Contact Us</a></li>
+          <li><a href="legal/support.html">Help Center</a></li>
+          <li><a href="/cdn-cgi/l/email-protection#3e4d4b4e4e514c4a7e585750485b4d4a4e4c51105750">Email Support</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <div class="footer-copy">© 2025 FinVest Pro. All rights reserved. Not SEBI registered. For educational purposes only.</div>
+      <div style="display:flex;gap:16px;">
+        <a href="legal/privacy-policy.html" style="color:var(--text-muted);font-size:0.8rem;text-decoration:none;">Privacy</a>
+        <a href="legal/terms.html" style="color:var(--text-muted);font-size:0.8rem;text-decoration:none;">Terms</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<!-- Toast Container -->
+<div id="toast-container" class="toast-container"></div>
+
+<script data-

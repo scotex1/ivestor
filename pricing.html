@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pricing — FinVest Pro</title>
+  <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+
+<nav class="navbar">
+  <a href="index.html" class="navbar-logo"><div class="logo-icon">📈</div>FinVest Pro</a>
+  <ul class="navbar-links">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="pricing.html" class="active">Pricing</a></li>
+    <li><a href="about.html">About</a></li>
+    <li><a href="contact.html">Contact</a></li>
+  </ul>
+  <div class="navbar-actions">
+    <a href="auth/login.html" class="btn btn-ghost btn-sm">Login</a>
+    <a href="auth/signup.html" class="btn btn-primary btn-sm">Get Started</a>
+  </div>
+</nav>
+
+<section class="section">
+  <div class="container">
+    <div class="text-center" style="margin-bottom:60px;">
+      <div class="section-label" style="justify-content:center;">Simple, Transparent Pricing</div>
+      <h1 style="font-size:clamp(2rem,4vw,3rem);margin-bottom:16px;">
+        Invest in your<br>financial future
+      </h1>
+      <p style="color:var(--text-secondary);font-size:1rem;max-width:480px;margin:0 auto 32px;">
+        Start free. Upgrade when you're ready. No hidden fees, no lock-ins.
+      </p>
+
+      <!-- Monthly/Yearly Toggle -->
+      <div style="display:inline-flex;background:var(--bg-card);border:1px solid var(--border);border-radius:100px;padding:4px;gap:4px;">
+        <button id="monthly-btn" onclick="toggleBilling('monthly')" class="btn btn-primary btn-sm" style="border-radius:100px;">Monthly</button>
+        <button id="yearly-btn" onclick="toggleBilling('yearly')" class="btn btn-ghost btn-sm" style="border-radius:100px;">
+          Yearly <span class="badge badge-green" style="margin-left:4px;padding:2px 8px;font-size:0.65rem;">Save 25%</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Pricing Cards (rendered by JS) -->
+    <div id="pricing-cards-container" class="pricing-grid"></div>
+
+    <!-- FAQ -->
+    <div style="max-width:680px;margin:80px auto 0;">
+      <h2 style="text-align:center;font-size:1.6rem;margin-bottom:40px;">Frequently Asked Questions</h2>
+
+      <div style="display:flex;flex-direction:column;gap:2px;">
+        <details style="background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-md);overflow:hidden;">
+          <summary style="padding:18px 22px;cursor:pointer;font-weight:600;font-size:0.95rem;list-style:none;display:flex;justify-content:space-between;align-items:center;">
+            Can I cancel anytime?
+            <span style="color:var(--gold);">+</span>
+          </summary>
+          <div style="padding:0 22px 18px;color:var(--text-secondary);font-size:0.9rem;line-height:1.7;">
+            Yes, you can cancel your subscription at any time. Your plan remains active until the end of the billing period. We don't offer mid-period refunds but you'll retain access until expiry.
+          </div>
+        </details>
+
+        <details style="background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-md);overflow:hidden;margin-top:2px;">
+          <summary style="padding:18px 22px;cursor:pointer;font-weight:600;font-size:0.95rem;list-style:none;display:flex;justify-content:space-between;align-items:center;">
+            What payment methods are accepted?
+            <span style="color:var(--gold);">+</span>
+          </summary>
+          <div style="padding:0 22px 18px;color:var(--text-secondary);font-size:0.9rem;line-height:1.7;">
+            We accept UPI, Net Banking, all major credit/debit cards (Visa, Mastercard, RuPay), and wallets via Cashfree — India's most trusted payment gateway.
+          </div>
+        </details>
+
+        <details style="background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-md);overflow:hidden;margin-top:2px;">
+          <summary style="padding:18px 22px;cursor:pointer;font-weight:600;font-size:0.95rem;list-style:none;display:flex;justify-content:space-between;align-items:center;">
+            Is this SEBI registered investment advice?
+            <span style="color:var(--gold);">+</span>
+          </summary>
+          <div style="padding:0 22px 18px;color:var(--text-secondary);font-size:0.9rem;line-height:1.7;">
+            No. FinVest Pro is an educational and analytical tool. We provide data, calculations, and analysis for your reference. We are not SEBI registered and nothing on our platform constitutes personalized investment advice. Always consult a SEBI-registered advisor.
+          </div>
+        </details>
+
+        <details style="background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-md);overflow:hidden;margin-top:2px;">
+          <summary style="padding:18px 22px;cursor:pointer;font-weight:600;font-size:0.95rem;list-style:none;display:flex;justify-content:space-between;align-items:center;">
+            Can I upgrade or downgrade my plan?
+            <span style="color:var(--gold);">+</span>
+          </summary>
+          <div style="padding:0 22px 18px;color:var(--text-secondary);font-size:0.9rem;line-height:1.7;">
+            Yes. You can upgrade at any time and the new plan activates immediately. Downgrading takes effect at the end of your current billing cycle.
+          </div>
+        </details>
+
+        <details style="background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-md);overflow:hidden;margin-top:2px;">
+          <summary style="padding:18px 22px;cursor:pointer;font-weight:600;font-size:0.95rem;list-style:none;display:flex;justify-content:space-between;align-items:center;">
+            Do you offer refunds?
+            <span style="color:var(--gold);">+</span>
+          </summary>
+          <div style="padding:0 22px 18px;color:var(--text-secondary);font-size:0.9rem;line-height:1.7;">
+            We offer a 3-day refund for first-time subscribers if you're not satisfied. See our <a href="legal/refund-policy.html" style="color:var(--gold);">Refund Policy</a> for details.
+          </div>
+        </details>
+      </div>
+    </div>
+
+    <!-- Bottom CTA -->
+    <div style="text-align:center;margin-top:64px;padding:48px;background:var(--gold-dim);border:1px solid var(--border-gold);border-radius:var(--radius-xl);">
+      <h3 style="margin-bottom:12px;">Still not sure?</h3>
+      <p style="color:var(--text-secondary);margin-bottom:24px;font-size:0.9rem;">
+        Start with the Free plan — no credit card needed. Upgrade when you need more.
+      </p>
+      <a href="auth/signup.html" class="btn btn-primary btn-lg">Start Free Today</a>
+    </div>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer-bottom">
+      <div class="footer-copy">© 2025 FinVest Pro. All rights reserved.</div>
+      <div style="display:flex;gap:16px;">
+        <a href="legal/privacy-policy.html" style="color:var(--text-muted);font-size:0.8rem;text-decoration:none;">Privacy</a>
+        <a href="legal/terms.html" style="color:var(--text-muted);font-size:0.8rem;text-decoration:none;">Terms</a>
+        <a href="legal/refund-policy.html" style="color:var(--text-muted);font-size:0.8rem;text-decoration:none;">Refund</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<div id="toast-container" class="toast-container"></div>
+
+<!-- Cashfree SDK -->
+<script src="https://sdk.cashfree.com/js/ui/2.0.0/cashfree.sandbox.js"></script>
+<script src="assets/js/api.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+<script src="assets/js/auth.js"></script>
+<script src="assets/js/payment.js"></script>
+
+<script>
+  let billingCycle = "monthly";
+
+  function toggleBilling(cycle) {
+    billingCycle = cycle;
+    document.getElementById("monthly-btn").className = cycle === "monthly"
+      ? "btn btn-primary btn-sm" : "btn btn-ghost btn-sm";
+    document.getElementById("yearly-btn").className = cycle === "yearly"
+      ? "btn btn-primary btn-sm" : "btn btn-ghost btn-sm";
+
+    // Re-render pricing cards with yearly prices if needed
+    renderPricingCards("pricing-cards-container");
+  }
+</script>
+</body>
+</html>

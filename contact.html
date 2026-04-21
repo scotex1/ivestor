@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Contact — FinVest Pro</title>
+  <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+<nav class="navbar">
+  <a href="index.html" class="navbar-logo"><div class="logo-icon">📈</div>FinVest Pro</a>
+  <ul class="navbar-links">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="pricing.html">Pricing</a></li>
+    <li><a href="contact.html" class="active">Contact</a></li>
+  </ul>
+  <div class="navbar-actions">
+    <a href="auth/login.html" class="btn btn-ghost btn-sm">Login</a>
+    <a href="auth/signup.html" class="btn btn-primary btn-sm">Sign Up</a>
+  </div>
+</nav>
+
+<section class="section">
+  <div class="container" style="max-width:900px;">
+    <div style="text-align:center;margin-bottom:56px;">
+      <div class="section-label" style="justify-content:center;">We're Here to Help</div>
+      <h1 style="font-size:2.2rem;margin-bottom:12px;">Contact Us</h1>
+      <p style="color:var(--text-secondary);">Reach out for support, feedback, or partnership enquiries.</p>
+    </div>
+
+    <div class="grid-2" style="gap:40px;align-items:start;">
+
+      <!-- Contact Form -->
+      <div class="card">
+        <h3 style="margin-bottom:24px;font-size:1.1rem;">Send a Message</h3>
+        <form id="contact-form" style="display:flex;flex-direction:column;gap:18px;" onsubmit="handleContactSubmit(event)">
+          <div class="form-group">
+            <label class="form-label">Your Name</label>
+            <input type="text" class="form-input" placeholder="Full name" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Email Address</label>
+            <input type="email" class="form-input" placeholder="you@example.com" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Subject</label>
+            <select class="form-input form-select">
+              <option value="">Select a topic</option>
+              <option>Technical Support</option>
+              <option>Billing / Payment</option>
+              <option>Feature Request</option>
+              <option>Partnership</option>
+              <option>Other</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Message</label>
+            <textarea class="form-input" rows="5" placeholder="Describe your issue or question..." required style="resize:vertical;"></textarea>
+          </div>
+          <button type="submit" id="contact-submit-btn" class="btn btn-primary btn-full">Send Message</button>
+        </form>
+        <div id="contact-success" style="display:none;" class="alert alert-success" style="margin-top:16px;">
+          ✓ Message sent! We'll reply within 24 hours.
+        </div>
+      </div>
+
+      <!-- Contact Info -->
+      <div style="display:flex;flex-direction:column;gap:20px;">
+        <div class="card">
+          <div style="font-size:1.5rem;margin-bottom:12px;">📧</div>
+          <h3 style="font-size:0.95rem;margin-bottom:6px;">Email Support</h3>
+          <p style="color:var(--text-secondary);font-size:0.85rem;margin-bottom:10px;">For general queries and support</p>
+          <a href="/cdn-cgi/l/email-protection#1d6e686d6d726f695d7b74736b786e696d6f72337473" style="color:var(--gold);font-size:0.9rem;"><span class="__cf_email__" data-cfemail="9cefe9ececf3eee8dcfaf5f2eaf9efe8eceef3b2f5f2">[email&#160;protected]</span></a>
+        </div>
+
+        <div class="card">
+          <div style="font-size:1.5rem;margin-bottom:12px;">💳</div>
+          <h3 style="font-size:0.95rem;margin-bottom:6px;">Billing Support</h3>
+          <p style="color:var(--text-secondary);font-size:0.85rem;margin-bottom:10px;">Payment issues, refunds, plan changes</p>
+          <a href="/cdn-cgi/l/email-protection#385a51545451565f785e51564e5d4b4c484a57165156" style="color:var(--gold);font-size:0.9rem;"><span class="__cf_email__" data-cfemail="3e5c5752525750597e585750485b4d4a4e4c51105750">[email&#160;protected]</span></a>
+        </div>
+
+        <div class="card">
+          <div style="font-size:1.5rem;margin-bottom:12px;">⏱️</div>
+          <h3 style="font-size:0.95rem;margin-bottom:6px;">Response Time</h3>
+          <p style="color:var(--text-secondary);font-size:0.85rem;">We typically respond within 24 hours on business days (Mon–Sat, 10AM–6PM IST).</p>
+        </div>
+
+        <div class="card card-gold">
+          <h3 style="font-size:0.95rem;margin-bottom:10px;">🚀 Quick Help</h3>
+          <div style="display:flex;flex-direction:column;gap:8px;">
+            <a href="legal/support.html" style="color:var(--text-secondary);font-size:0.85rem;text-decoration:none;">→ Help Center & FAQs</a>
+            <a href="legal/refund-policy.html" style="color:var(--text-secondary);font-size:0.85rem;text-decoration:none;">→ Refund Policy</a>
+            <a href="pricing.html" style="color:var(--text-secondary);font-size:0.85rem;text-decoration:none;">→ Plan Comparison</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div id="toast-container" class="toast-container"></div>
+
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script src="assets/js/api.js"></script>
+<script>
+async function handleContactSubmit(e) {
+  e.preventDefault();
+  const btn = document.getElementById("contact-submit-btn")

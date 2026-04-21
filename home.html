@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Home — FinVest Pro</title>
+  <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+<nav class="navbar">
+  <a href="index.html" class="navbar-logo"><div class="logo-icon">📈</div>FinVest Pro</a>
+  <ul class="navbar-links">
+    <li><a href="index.html" class="active">Home</a></li>
+    <li><a href="pricing.html">Pricing</a></li>
+    <li><a href="about.html">About</a></li>
+    <li><a href="testimonials.html">Reviews</a></li>
+    <li><a href="contact.html">Contact</a></li>
+  </ul>
+  <div class="navbar-actions">
+    <a href="auth/login.html" class="btn btn-ghost btn-sm">Login</a>
+    <a href="auth/signup.html" class="btn btn-primary btn-sm">Get Started Free</a>
+  </div>
+</nav>
+
+<!-- Hero -->
+<section class="hero">
+  <div class="hero-orb hero-orb-1"></div>
+  <div class="hero-orb hero-orb-2"></div>
+  <div class="container" style="position:relative;z-index:1;text-align:center;">
+    <div class="section-label" style="justify-content:center;">India's #1 Financial Intelligence Platform</div>
+    <h1 class="display-font fade-in" style="margin-bottom:24px;">
+      Smarter Investing<br>
+      <span style="background:linear-gradient(135deg,var(--gold),var(--gold-light));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">Starts Here</span>
+    </h1>
+    <p class="fade-in fade-in-delay-1" style="font-size:1.1rem;color:var(--text-secondary);max-width:520px;margin:0 auto 36px;">
+      7 powerful AI engines to profile your risk, plan your goals, analyze stocks, and optimize your portfolio.
+    </p>
+    <div class="flex-center gap-16 fade-in fade-in-delay-2" style="flex-wrap:wrap;">
+      <a href="auth/signup.html" class="btn btn-primary btn-lg">Start Free — No Card Needed</a>
+      <a href="pricing.html" class="btn btn-outline btn-lg">See Plans</a>
+    </div>
+  </div>
+</section>
+
+<!-- Features Strip -->
+<section style="background:var(--bg-secondary);border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:40px 0;position:relative;z-index:1;">
+  <div class="container">
+    <div class="grid-4">
+      <div style="text-align:center;">
+        <div style="font-size:2rem;margin-bottom:8px;">🔒</div>
+        <div style="font-weight:600;font-size:0.9rem;">Bank-Grade Security</div>
+        <div style="color:var(--text-muted);font-size:0.8rem;margin-top:4px;">Firebase Auth + encrypted storage</div>
+      </div>
+      <div style="text-align:center;">
+        <div style="font-size:2rem;margin-bottom:8px;">📊</div>
+        <div style="font-weight:600;font-size:0.9rem;">Real NSE/BSE Data</div>
+        <div style="color:var(--text-muted);font-size:0.8rem;margin-top:4px;">Live market feeds</div>
+      </div>
+      <div style="text-align:center;">
+        <div style="font-size:2rem;margin-bottom:8px;">⚡</div>
+        <div style="font-weight:600;font-size:0.9rem;">Instant Analysis</div>
+        <div style="color:var(--text-muted);font-size:0.8rem;margin-top:4px;">Results in seconds</div>
+      </div>
+      <div style="text-align:center;">
+        <div style="font-size:2rem;margin-bottom:8px;">🇮🇳</div>
+        <div style="font-weight:600;font-size:0.9rem;">Built for India</div>
+        <div style="color:var(--text-muted);font-size:0.8rem;margin-top:4px;">INR, SIP, NPS, ELSS support</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Engines Showcase -->
+<section class="section">
+  <div class="container">
+    <div class="text-center" style="margin-bottom:52px;">
+      <div class="section-label" style="justify-content:center;">7 AI-Powered Engines</div>
+      <h2>One platform. Everything you need.</h2>
+    </div>
+    <div class="engine-grid">
+      <div class="card card-gold"><div class="engine-icon" style="background:rgba(201,168,76,0.1);border-color:rgba(201,168,76,0.3);">📊</div><div class="engine-name">Risk Profiler</div><div class="engine-desc">Understand your investment personality with our 10-question science-backed quiz.</div><div class="mt-16"><span class="badge badge-green">Free</span></div></div>
+      <div class="card"><div class="engine-icon" style="background:rgba(6,182,212,0.1);border-color:rgba(6,182,212,0.3);">📰</div><div class="engine-name">Market News</div><div class="engine-desc">AI-curated financial news from 50+ Indian and global sources. Signal, no noise.</div><div class="mt-16"><span class="badge badge-green">Free</span></div></div>
+      <div class="card"><div class="engine-icon" style="background:rgba(34,197,94,0.1);border-color:rgba(34,197,94,0.3);">🎯</div><div class="engine-name">Goal Planner</div><div class="engine-desc">Map out financial goals — house, car, education — with SIP calculations.</div><div class="mt-16"><span class="badge badge-blue">Basic+</span></div></div>
+      <div class="card"><div class="engine-icon" style="background:rgba(167,139,250,0.1);border-color:rgba(167,139,250,0.3);">🏖️</div><div class="engine-name">Retirement Planner</div><div class="engine-desc">Calculate your corpus and monthly SIP requirement to retire on your terms.</div><div class="mt-16"><span class="badge badge-blue">Basic+</span></div></div>
+      <div class="card"><div class="engine-icon" style="background:rgba(245,158,11,0.1);border-color:rgba(245,158,11,0.3);">📈</div><div class="engine-name">Stock Analysis</div><div class="engine-desc">Deep-dive NSE/BSE stocks: P/E, ROE, debt ratios, technicals, buy/sell signals.</div><div class="mt-16"><span class="badge badge-gold">Pro+</span></div></div>
+      <div class="card"><div class="engine-icon" style="background:rgba(236,72,153,0.1);border-color:rgba(236,72,153,0.3);">💼</div><div class="engine-name">Portfolio Optimizer</div><div class="engine-desc">Build a diversified portfolio using Modern Portfolio Theory matched to your profile.</div><div class="mt-16"><span class="badge badge-gold">Pro+</span></div></div>
+      <div class="card"><div class="engine-icon" style="background:rgba(59,130,246,0.1);border-color:rgba(59,130,246,0.3);">🌐</div><div class="engine-name">Global Events</div><div class="engine-desc">Track Fed decisions, geopolitical events, and macro trends affecting your money.</div><div class="mt-16"><span class="badge badge-gold">Pro+</span></div></div>
+    </div>
+    <div class="text-center mt-32">
+      <a href="auth/signup.html" class="btn btn-primary btn-lg">Start Free — Access 2 Engines</a>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="section" style="background:var(--bg-secondary);border-top:1px solid var(--border);">
+  <div class="container-narrow text-center">
+    <h2 class="display-font" style="margin-bottom:16px;">Join 2,000+ Indian investors<br>making smarter decisions</h2>
+    <p style="color:var(--text-secondary);margin-bottom:32px;">Start free. Upgrade anytime. Cancel anytime.</p>
+    <a href="auth/signup.html" class="btn btn-primary btn-lg">Create Free Account →</a>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer-bottom">
+      <div class="footer-copy">© 2025 FinVest Pro. Not SEBI registered. For educational purposes only.</div>
+      <div style="display:flex;gap:16px;">
+        <a href="legal/privacy-policy.html" style="color:var(--text-muted);font-size:0.8rem;text-decoration:none;">Privacy</a>
+        <a href="legal/terms.html" style="color:var(--text-muted);font-size:0.8rem;text-decoration:none;">Terms</a>
+        <a href="legal/refund-policy.html" style="color:var(--text-muted);font-size:0.8rem;text-decoration:none;">Refund</a>
+      </div>
+    </div>
+  </div>
+</footer>
+<div id="toast-container" class="toast-container"></div>
+<script src="assets/js/api.js"></script>
+</body>
+</html>
