@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Payments — Admin — FinVest Pro</title>
+  <link rel="stylesheet" href="../assets/css/style.css">
+</head>
+<body>
+<div class="admin-header">
+  <div style="display:flex;align-items:center;gap:16px;">
+    <a href="../dashboard/dashboard.html" class="navbar-logo" style="font-size:1.1rem;"><div class="logo-icon" style="width:28px;height:28px;font-size:0.9rem;">📈</div>FinVest Pro</a>
+    <span class="admin-badge">Admin Panel</span>
+  </div>
+  <div style="display:flex;gap:10px;">
+    <a href="../dashboard/dashboard.html" class="btn btn-ghost btn-sm">← Dashboard</a>
+    <button id="logout-btn" class="btn btn-danger btn-sm">Sign Out</button>
+  </div>
+</div>
+
+<div class="layout-dashboard">
+  <aside class="sidebar" style="background:var(--bg-primary);">
+    <div class="sidebar-section">
+      <a href="admin-dashboard.html" class="sidebar-link"><span class="icon">📊</span> Overview</a>
+      <a href="users.html" class="sidebar-link"><span class="icon">👥</span> Users</a>
+      <a href="payments.html" class="sidebar-link active"><span class="icon">💰</span> Payments</a>
+      <a href="plans.html" class="sidebar-link"><span class="icon">📋</span> Plans</a>
+    </div>
+  </aside>
+
+  <main class="main-content">
+    <!-- Revenue Summary -->
+    <div class="grid-4" style="margin-bottom:28px;">
+      <div class="stat-card">
+        <div class="stat-label">Total Revenue</div>
+        <div class="stat-value" id="p-total-rev" style="font-size:1.4rem;">—</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">This Month</div>
+        <div class="stat-value" id="p-month-rev" style="font-size:1.4rem;color:var(--gold);">—</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Success Rate</div>
+        <div class="stat-value" id="p-success-rate" style="font-size:1.4rem;color:var(--accent-green);">—</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Total Transactions</div>
+        <div class="stat-value" id="p-total-tx" style="font-size:1.4rem;">—</div>
+      </div>
+    </div>
+
+    <!-- Filters -->
+    <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-bottom:20px;">
+      <h2 style="font-size:1.2rem;">Payment Transactions</h2>
+      <div style="display:flex;gap:10px;flex-wrap:wrap;">
+        <select id="status-filter" class="form-input form-select" style="width:140px;" onchange="loadPayments()">
+          <option value="">All Status</option>
+          <option value="SUCCESS">Success</option>
+          <option value="FAILED">Failed</option>
+          <option value="PENDING">Pending</option>
+        </select>
+        <select id="plan-filter-p" class="form-input form-select" style="width:130px;" onchange="loadPayments()">
+          <option value="">All Plans</option>
+          <option value="basic">Basic</option>
+          <option value="pro">Pro</option>
+          <option value="elite">Elite</option>
+        </select>
+        <input type="text" id="payment-search" class="form-input" placeholder="Search email / order ID" style="width:220px;">
+      </div>
+    </div>
+
+    <div class="table-wrapper">
+      <table>
+        <thead>
+          <tr>
+            <th>Order ID</th>
+            <th>User</th>
+            <th>Plan</th>
+            <th>Amount</th>
+            <th>Gateway</th>
+            <th>Status</th>
+            <th>Date</th>
+          </tr>
+        </thead>
+        <tbody id="payments-table-body">
+          <tr><td colspan="7" style="text-align:center;padding:40px;"><span class="spinner"></span></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </main>
+</div>
+
+<div id="toast-container" class="toast-container"></div>
+<script src="../assets/js/api.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+<script src="../assets/js/auth.js"></script>
+<script src="../assets/js/admin.js"></script>
+<script>
+document.addEventListener("DOMContentLoaded", async () => {
+  if (!requireAuth()) return;
+  if (!requireAdmin()) return;
+  await loadPayments();
+  setupPaymentSearch();
+});
+
+async function loadPayments() {
+  const token = getStoredToken();
+  const status = document.getElementById("status-filter").value;
+  const plan = document.getElementById("plan-filter-p").value;
+  const tbody = document.getElementById("payments-table-body");
+
+  tbody.innerHTML = `<tr><td colspan="7" style="text-align:center;padding:40px;"><span class="spinner"></span></td></tr>`;
+
+  try {
+    const res = await API.admin.getPayments({ status, plan, limit: 50 }, token);
+    const payments = res?.payments || [];
+    const stats = res?.stats || {};
+
+    document.getElementById("p-total-rev").textContent = formatCurrency(stats.total_revenue || 0);
+    document.getElementById("p-month-rev").textContent = formatCurrency(stats.month_revenue || 0);
+    document.getElementById("p-success-rate").textContent = (stats.success_rate || 0) + "%";
+    document.getElementById("p-total-tx").textContent = stats.total_transactions || 0;
+
+    if (!payments.length) {
+      tbody.innerHTML = `<tr><td colspan="7" style="text-align:center;color:var(--text-muted);padding:40px;">No payments found</td></tr>`;
+      return;
+    }
+
+    tbody.innerHTML = payments.map(p => `
+      <tr>
+        <td style="font-family:var(--font-mono);font-size:0.75rem;color:var(--text-muted);">${p.order_id}</td>
+        <td style="font-size:0.85rem;">${escapeHtml(p.user_email)}</td>
+        <td><span class="badge ${getPlanBadgeClass(p.plan)}">${p.plan}</span></td>
+        <td style="font-family:var(--font-mono);font-weight:600;">${formatCurrency(p.amount)}</td>
+        <td style="font-size:0.8rem;color:var(--text-muted);">Cashfree</td>
+        <td><span class="badge ${p.status==='SUCCESS'?'badge-green':p.status==='FAILED'?'badge-red':'badge-blue'}">${p.status}</span></td>
+        <td style="font-size:0.8rem;color:var(--text-secondary);">${formatDate(p.date)}</td>
+      </tr>
+    `).join("");
+  } catch (err) {
+    tbody.innerHTML = `<tr><td colspan="7" style="text-align:center;color:var(--accent-red);padding:40px;">Failed to load: ${err.message}</td></tr>`;
+  }
+}
+
+function setupPaymentSearch() {
+  let t;
+  document.getElementById("payment-search").addEventListener("input", () => {
+    clearTimeout(t);
+    t = setTimeout(loadPayments, 400);
+  });
+}
+</script>
+</body>
+</html>

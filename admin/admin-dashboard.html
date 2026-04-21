@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Dashboard — FinVest Pro</title>
+  <link rel="stylesheet" href="../assets/css/style.css">
+</head>
+<body>
+
+<!-- Admin Header -->
+<div class="admin-header">
+  <div style="display:flex;align-items:center;gap:16px;">
+    <a href="../dashboard/dashboard.html" class="navbar-logo" style="font-size:1.1rem;">
+      <div class="logo-icon" style="width:28px;height:28px;font-size:0.9rem;">📈</div>
+      FinVest Pro
+    </a>
+    <span class="admin-badge">Admin Panel</span>
+  </div>
+
+  <div style="display:flex;align-items:center;gap:12px;">
+    <span style="font-size:0.82rem;color:var(--text-muted);font-family:var(--font-mono);" id="admin-time"></span>
+    <a href="../dashboard/dashboard.html" class="btn btn-ghost btn-sm">← User Dashboard</a>
+    <button id="logout-btn" class="btn btn-danger btn-sm">Sign Out</button>
+  </div>
+</div>
+
+<!-- Admin Layout -->
+<div class="layout-dashboard">
+
+  <!-- Admin Sidebar -->
+  <aside class="sidebar" style="background:var(--bg-primary);">
+    <div class="sidebar-section">
+      <div class="sidebar-label">Admin</div>
+      <a href="admin-dashboard.html" class="sidebar-link active">
+        <span class="icon">📊</span> Overview
+      </a>
+      <a href="users.html" class="sidebar-link">
+        <span class="icon">👥</span> Users
+      </a>
+      <a href="payments.html" class="sidebar-link">
+        <span class="icon">💰</span> Payments
+      </a>
+      <a href="plans.html" class="sidebar-link">
+        <span class="icon">📋</span> Plans
+      </a>
+    </div>
+  </aside>
+
+  <!-- Admin Main -->
+  <main class="main-content">
+
+    <!-- Page Header -->
+    <div style="margin-bottom:28px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;">
+      <div>
+        <h2 style="font-size:1.5rem;margin-bottom:4px;">Admin Overview</h2>
+        <p style="color:var(--text-secondary);font-size:0.85rem;">Platform health at a glance</p>
+      </div>
+      <div style="display:flex;gap:10px;">
+        <button onclick="window.location.reload()" class="btn btn-ghost btn-sm">↻ Refresh</button>
+      </div>
+    </div>
+
+    <!-- Stats Grid -->
+    <div id="admin-stats" class="grid-4" style="margin-bottom:36px;">
+      <div class="stat-card skeleton" style="height:96px;"></div>
+      <div class="stat-card skeleton" style="height:96px;"></div>
+      <div class="stat-card skeleton" style="height:96px;"></div>
+      <div class="stat-card skeleton" style="height:96px;"></div>
+    </div>
+
+    <!-- Two Column Layout -->
+    <div class="grid-2" style="gap:28px;align-items:start;">
+
+      <!-- Recent Users -->
+      <div>
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;">
+          <h3 style="font-size:1rem;">Recent Users</h3>
+          <a href="users.html" class="btn btn-ghost btn-sm">View All</a>
+        </div>
+
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr>
+                <th>User</th>
+                <th>Plan</th>
+                <th>Status</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="users-table-body">
+              <tr><td colspan="4" style="text-align:center;padding:32px;"><span class="spinner"></span></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Recent Payments -->
+      <div>
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;">
+          <h3 style="font-size:1rem;">Recent Payments</h3>
+          <a href="payments.html" class="btn btn-ghost btn-sm">View All</a>
+        </div>
+
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr>
+                <th>User</th>
+                <th>Plan</th>
+                <th>Amount</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody id="payments-table-body">
+              <tr><td colspan="4" style="text-align:center;padding:32px;"><span class="spinner"></span></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- Plan Distribution -->
+    <div class="card mt-32">
+      <h3 style="font-size:1rem;margin-bottom:20px;">Plan Distribution</h3>
+      <div id="plan-distribution" class="grid-4">
+        <div style="padding:20px;background:var(--bg-secondary);border-radius:var(--radius-md);text-align:center;">
+          <div style="font-size:1.6rem;font-weight:700;font-family:var(--font-mono);color:var(--text-secondary);">--</div>
+          <div style="font-size:0.78rem;color:var(--text-muted);margin-top:6px;">Free Users</div>
+          <div class="progress-bar" style="margin-top:12px;"><div class="progress-fill" style="width:0%;background:var(--text-muted);"></div></div>
+        </div>
+        <div style="padding:20px;background:var(--bg-secondary);border-radius:var(--radius-md);text-align:center;">
+          <div style="font-size:1.6rem;font-weight:700;font-family:var(--font-mono);color:var(--accent-blue);">--</div>
+          <div style="font-size:0.78rem;color:var(--text-muted);margin-top:6px;">Basic</div>
+          <div class="progress-bar" style="margin-top:12px;"><div class="progress-fill" style="width:0%;background:var(--accent-blue);"></div></div>
+        </div>
+        <div style="padding:20px;background:var(--bg-secondary);border-radius:var(--radius-md);text-align:center;">
+          <div style="font-size:1.6rem;font-weight:700;font-family:var(--font-mono);color:var(--gold);">--</div>
+          <div style="font-size:0.78rem;color:var(--text-muted);margin-top:6px;">Pro</div>
+          <div class="progress-bar" style="margin-top:12px;"><div class="progress-fill" style="width:0%;"></div></div>
+        </div>
+        <div style="padding:20px;background:var(--bg-secondary);border-radius:var(--radius-md);text-align:center;">
+          <div style="font-size:1.6rem;font-weight:700;font-family:var(--font-mono);color:var(--gold-light);">--</div>
+          <div style="font-size:0.78rem;color:var(--text-muted);margin-top:6px;">Elite</div>
+          <div class="progress-bar" style="margin-top:12px;"><div class="progress-fill" style="width:0%;"></div></div>
+        </div>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<div id="toast-container" class="toast-container"></div>
+
+<script src="../assets/js/api.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+<script src="../assets/js/auth.js"></script>
+<script src="../assets/js/admin.js"></script>
+<script>
+  // Live clock
+  function updateClock() {
+    const el = document.getElementById("admin-time");
+    if (el) el.textContent = new Date().toLocaleString("en-IN", { dateStyle: "medium", timeStyle: "short" });
+  }
+  updateClock();
+  setInterval(updateClock, 60000);
+</script>
+</body>
+</html>

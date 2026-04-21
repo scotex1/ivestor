@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Plans — Admin — FinVest Pro</title>
+  <link rel="stylesheet" href="../assets/css/style.css">
+</head>
+<body>
+<div class="admin-header">
+  <div style="display:flex;align-items:center;gap:16px;">
+    <a href="../dashboard/dashboard.html" class="navbar-logo" style="font-size:1.1rem;"><div class="logo-icon" style="width:28px;height:28px;font-size:0.9rem;">📈</div>FinVest Pro</a>
+    <span class="admin-badge">Admin Panel</span>
+  </div>
+  <div style="display:flex;gap:10px;">
+    <a href="../dashboard/dashboard.html" class="btn btn-ghost btn-sm">← Dashboard</a>
+    <button id="logout-btn" class="btn btn-danger btn-sm">Sign Out</button>
+  </div>
+</div>
+
+<div class="layout-dashboard">
+  <aside class="sidebar" style="background:var(--bg-primary);">
+    <div class="sidebar-section">
+      <a href="admin-dashboard.html" class="sidebar-link"><span class="icon">📊</span> Overview</a>
+      <a href="users.html" class="sidebar-link"><span class="icon">👥</span> Users</a>
+      <a href="payments.html" class="sidebar-link"><span class="icon">💰</span> Payments</a>
+      <a href="plans.html" class="sidebar-link active"><span class="icon">📋</span> Plans</a>
+    </div>
+  </aside>
+
+  <main class="main-content">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:28px;flex-wrap:wrap;gap:12px;">
+      <div>
+        <h2 style="font-size:1.4rem;margin-bottom:4px;">Plan Management</h2>
+        <p style="color:var(--text-secondary);font-size:0.85rem;">Configure pricing and features for each plan</p>
+      </div>
+    </div>
+
+    <!-- Plan Cards -->
+    <div class="grid-3" style="gap:24px;margin-bottom:32px;">
+
+      <!-- Free Plan -->
+      <div class="card">
+        <div style="display:flex;justify-content:space-between;align-items:start;margin-bottom:16px;">
+          <div>
+            <span class="badge badge-gray">Free</span>
+            <div style="font-size:1.6rem;font-family:var(--font-mono);font-weight:500;margin-top:8px;">₹0</div>
+            <div style="font-size:0.78rem;color:var(--text-muted);">forever</div>
+          </div>
+          <span class="badge badge-green">Active</span>
+        </div>
+        <div style="font-size:0.82rem;color:var(--text-secondary);margin-bottom:16px;">Base plan for new users. Includes Risk Profiler and Market News.</div>
+        <div class="divider" style="margin:12px 0;"></div>
+        <div style="display:flex;flex-direction:column;gap:6px;margin-bottom:16px;">
+          <div style="display:flex;justify-content:space-between;font-size:0.82rem;"><span style="color:var(--text-muted);">Active users</span><span class="badge badge-gray" id="free-count">—</span></div>
+          <div style="display:flex;justify-content:space-between;font-size:0.82rem;"><span style="color:var(--text-muted);">Engines included</span><span>2</span></div>
+        </div>
+        <button class="btn btn-ghost btn-sm btn-full" onclick="editPlan('free')">Edit Features</button>
+      </div>
+
+      <!-- Basic Plan -->
+      <div class="card">
+        <div style="display:flex;justify-content:space-between;align-items:start;margin-bottom:16px;">
+          <div>
+            <span class="badge badge-blue">Basic</span>
+            <div style="font-size:1.6rem;font-family:var(--font-mono);font-weight:500;margin-top:8px;" id="basic-price">₹499</div>
+            <div style="font-size:0.78rem;color:var(--text-muted);">per month</div>
+          </div>
+          <span class="badge badge-green">Active</span>
+        </div>
+        <div style="font-size:0.82rem;color:var(--text-secondary);margin-bottom:16px;">For individual investors. Adds Goal Planner and Retirement Planner.</div>
+        <div class="divider" style="margin:12px 0;"></div>
+        <div style="display:flex;flex-direction:column;gap:6px;margin-bottom:16px;">
+          <div style="display:flex;justify-content:space-between;font-size:0.82rem;"><span style="color:var(--text-muted);">Active subscribers</span><span class="badge badge-blue" id="basic-count">—</span></div>
+          <div style="display:flex;justify-content:space-between;font-size:0.82rem;"><span style="color:var(--text-muted);">Engines included</span><span>4</span></div>
+        </div>
+        <button class="btn btn-outline btn-sm btn-full" onclick="editPlan('basic')">Edit Plan</button>
+      </div>
+
+      <!-- Pro Plan -->
+      <div class="card card-gold">
+        <div style="display:flex;justify-content:space-between;align-items:start;margin-bottom:16px;">
+          <div>
+            <span class="badge badge-gold">Pro ⭐</span>
+            <div style="font-size:1.6rem;font-family:var(--font-mono);font-weight:500;margin-top:8px;color:var(--gold);" id="pro-price">₹999</div>
+            <div style="font-size:0.78rem;color:var(--text-muted);">per month</div>
+          </div>
+          <span class="badge badge-green">Active</span>
+        </div>
+        <div style="font-size:0.82rem;color:var(--text-secondary);margin-bottom:16px;">Full access to all 7 engines. Most popular plan.</div>
+        <div class="divider" style="margin:12px 0;border-color:var(--border-gold);"></div>
+        <div style="display:flex;flex-direction:column;gap:6px;margin-bottom:16px;">
+          <div style="display:flex;justify-content:space-between;font-size:0.82rem;"><span style="color:var(--text-muted);">Active subscribers</span><span class="badge badge-gold" id="pro-count">—</span></div>
+          <div style="display:flex;justify-content:space-between;font-size:0.82rem;"><span style="color:var(--text-muted);">Engines included</span><span>7</span></div>
+        </div>
+        <button class="btn btn-primary btn-sm btn-full" onclick="editPlan('pro')">Edit Plan</button>
+      </div>
+    </div>
+
+    <!-- Coupon Codes -->
+    <div class="card" style="margin-bottom:24px;">
+      <h3 style="font-size:1rem;margin-bottom:16px;">Coupon Codes</h3>
+      <div class="table-wrapper">
+        <table>
+          <thead>
+            <tr>
+              <th>Code</th>
+              <th>Discount</th>
+              <th>Valid Plans</th>
+              <th>Uses</th>
+              <th>Expiry</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td style="font-family:var(--font-mono);font-weight:600;">LAUNCH50</td>
+              <td style="color:var(--accent-green);">50% off</td>
+              <td>Basic, Pro</td>
+              <td>142 / 200</td>
+              <td>Mar 31, 2025</td>
+              <td><span class="badge badge-green">Active</span></td>
+            </tr>
+            <tr>
+              <td style="font-family:var(--font-mono);font-weight:600;">WELCOME25</td>
+              <td style="color:var(--accent-green);">25% off</td>
+              <td>All</td>
+              <td>89 / ∞</td>
+              <td>—</td>
+              <td><span class="badge badge-green">Active</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div style="margin-top:16px;">
+        <button class="btn btn-outline btn-sm" onclick="showToast('Coupon editor coming soon', 'info')">+ Add Coupon</button>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<!-- Edit Plan Modal -->
+<div class="modal-overlay" id="plan-modal">
+  <div class="modal">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:24px;">
+      <h3 style="font-size:1.1rem;">Edit Plan</h3>
+      <button onclick="document.getElementById('plan-modal').classList.remove('active')" class="btn btn-ghost btn-sm">✕</button>
+    </div>
+    <div id="plan-modal-content" style="display:flex;flex-direction:column;gap:16px;">
+      <div class="form-group"><label class="form-label">Plan Name</label><input type="text" id="edit-plan-name" class="form-input"></div>
+      <div class="form-group"><label class="form-label">Monthly Price (₹)</label><input type="number" id="edit-plan-price" class="form-input"></div>
+      <div class="form-group"><label class="form-label">Yearly Price (₹)</label><input type="number" id="edit-plan-yearly" class="form-input"></div>
+      <div class="form-group"><label class="form-label">Description</label><textarea id="edit-plan-desc" class="form-input" rows="3"></textarea></div>
+      <div style="display:flex;gap:10px;">
+        <button class="btn btn-primary" onclick="savePlanEdit()">Save Changes</button>
+        <button class="btn btn-ghost" onclick="document.getElementById('plan-modal').classList.remove('active')">Cancel</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="toast-container" class="toast-container"></div>
+<script src="../assets/js/api.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+<script src="../assets/js/auth.js"></script>
+<script src="../assets/js/admin.js"></script>
+<script>
+let editingPlan = null;
+
+document.addEventListener("DOMContentLoaded", async () => {
+  if (!requireAuth()) return;
+  if (!requireAdmin()) return;
+  await loadPlanStats();
+});
+
+async function loadPlanStats() {
+  try {
+    const token = getStoredToken();
+    const stats = await API.admin.getStats(token);
+    if (stats) {
+      document.getElementById("free-count").textContent = stats.free_users || "—";
+      document.getElementById("basic-count").textContent = stats.basic_users || "—";
+      document.getElementById("pro-count").textContent = stats.pro_users || "—";
+    }
+  } catch (e) { /* skip */ }
+}
+
+function editPlan(planId) {
+  editingPlan = planId;
+  const prices = { free: { price: 0, yearly: 0 }, basic: { price: 499, yearly: 4499 }, pro: { price: 999, yearly: 8999 } };
+  const names = { free: "Free Plan", basic: "Basic Plan", pro: "Pro Plan" };
+  const descs = { free: "Base plan for all users", basic: "For individual investors", pro: "Full access to all engines" };
+
+  document.getElementById("edit-plan-name").value = names[planId] || planId;
+  document.getElementById("edit-plan-price").value = prices[planId]?.price || 0;
+  document.getElementById("edit-plan-yearly").value = prices[planId]?.yearly || 0;
+  document.getElementById("edit-plan-desc").value = descs[planId] || "";
+  document.getElementById("plan-modal").classList.add("active");
+}
+
+async function savePlanEdit() {
+  const token = getStoredToken();
+  try {
+    await API.admin.updatePlan(editingPlan, {
+      name: document.getElementById("edit-plan-name").value,
+      price: document.getElementById("edit-plan-price").value,
+      yearly_price: document.getElementById("edit-plan-yearly").value,
+      description: document.getElementById("edit-plan-desc").value
+    }, token);
+    showToast("Plan updated!", "success");
+    document.getElementById("plan-modal").classList.remove("active");
+  } catch (err) {
+    showToast("Update failed: " + err.message, "error");
+  }
+}
+</script>
+</body>
+</html>

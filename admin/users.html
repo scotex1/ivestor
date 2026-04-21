@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Users — Admin — FinVest Pro</title>
+  <link rel="stylesheet" href="../assets/css/style.css">
+</head>
+<body>
+<div class="admin-header">
+  <div style="display:flex;align-items:center;gap:16px;">
+    <a href="../dashboard/dashboard.html" class="navbar-logo" style="font-size:1.1rem;"><div class="logo-icon" style="width:28px;height:28px;font-size:0.9rem;">📈</div>FinVest Pro</a>
+    <span class="admin-badge">Admin Panel</span>
+  </div>
+  <div style="display:flex;gap:10px;">
+    <a href="../dashboard/dashboard.html" class="btn btn-ghost btn-sm">← User Dashboard</a>
+    <button id="logout-btn" class="btn btn-danger btn-sm">Sign Out</button>
+  </div>
+</div>
+
+<div class="layout-dashboard">
+  <aside class="sidebar" style="background:var(--bg-primary);">
+    <div class="sidebar-section">
+      <a href="admin-dashboard.html" class="sidebar-link"><span class="icon">📊</span> Overview</a>
+      <a href="users.html" class="sidebar-link active"><span class="icon">👥</span> Users</a>
+      <a href="payments.html" class="sidebar-link"><span class="icon">💰</span> Payments</a>
+      <a href="plans.html" class="sidebar-link"><span class="icon">📋</span> Plans</a>
+    </div>
+  </aside>
+
+  <main class="main-content">
+    <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-bottom:24px;">
+      <div>
+        <h2 style="font-size:1.4rem;margin-bottom:4px;">All Users</h2>
+        <p style="color:var(--text-secondary);font-size:0.85rem;" id="user-count">Loading...</p>
+      </div>
+      <div style="display:flex;gap:10px;flex-wrap:wrap;">
+        <input type="text" id="user-search" class="form-input" placeholder="Search email or name..." style="width:240px;">
+        <select id="plan-filter" class="form-input form-select" style="width:140px;" onchange="applyFilters()">
+          <option value="">All Plans</option>
+          <option value="free">Free</option>
+          <option value="basic">Basic</option>
+          <option value="pro">Pro</option>
+          <option value="elite">Elite</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="table-wrapper">
+      <table>
+        <thead>
+          <tr>
+            <th>User</th>
+            <th>Plan</th>
+            <th>Status</th>
+            <th>Joined</th>
+            <th>Plan Expiry</th>
+            <th>Revenue</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody id="users-table-body">
+          <tr><td colspan="7" style="text-align:center;padding:40px;"><span class="spinner"></span></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Pagination -->
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-top:20px;flex-wrap:wrap;gap:12px;">
+      <div style="font-size:0.82rem;color:var(--text-muted);" id="pagination-info"></div>
+      <div style="display:flex;gap:8px;">
+        <button class="btn btn-ghost btn-sm" id="prev-page" onclick="changePage(-1)" disabled>← Prev</button>
+        <button class="btn btn-ghost btn-sm" id="next-page" onclick="changePage(1)">Next →</button>
+      </div>
+    </div>
+  </main>
+</div>
+
+<!-- User Detail Modal -->
+<div class="modal-overlay" id="user-modal">
+  <div class="modal" style="max-width:560px;">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:24px;">
+      <h3 style="font-size:1.1rem;">User Details</h3>
+      <button onclick="document.getElementById('user-modal').classList.remove('active')" class="btn btn-ghost btn-sm">✕</button>
+    </div>
+    <div id="user-modal-content"></div>
+  </div>
+</div>
+
+<div id="toast-container" class="toast-container"></div>
+<script src="../assets/js/api.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+<script src="../assets/js/auth.js"></script>
+<script src="../assets/js/admin.js"></script>
+<script>
+let currentPage = 1;
+const PAGE_SIZE = 20;
+
+document.addEventListener("DOMContentLoaded", async () => {
+  if (!requireAuth()) return;
+  if (!requireAdmin()) return;
+  setupUserSearch();
+  await loadUsersPage();
+});
+
+async function loadUsersPage() {
+  const token = getStoredToken();
+  const search = document.getElementById("user-search").value;
+  const plan = document.getElementById("plan-filter").value;
+  const tbody = document.getElementById("users-table-body");
+
+  tbody.innerHTML = `<tr><td colspan="7" style="text-align:center;padding:40px;"><span class="spinner"></span></td></tr>`;
+
+  try {
+    const res = await API.admin.getUsers({
+      page: currentPage, limit: PAGE_SIZE,
+      search, plan
+    }, token);
+
+    const users = res?.users || [];
+    const total = res?.total || 0;
+
+    document.getElementById("user-count").textContent = `${total.toLocaleString()} total users`;
+    document.getElementById("pagination-info").textContent = `Showing ${((currentPage-1)*PAGE_SIZE)+1}–${Math.min(currentPage*PAGE_SIZE, total)} of ${total}`;
+    document.getElementById("prev-page").disabled = currentPage === 1;
+    document.getElementById("next-page").disabled = currentPage * PAGE_SIZE >= total;
+
+    if (!users.length) {
+      tbody.innerHTML = `<tr><td colspan="7" style="text-align:center;color:var(--text-muted);padding:40px;">No users found</td></tr>`;
+      return;
+    }
+
+    tbody.innerHTML = users.map(u => `
+      <tr>
+        <td>
+          <div style="display:flex;align-items:center;gap:10px;">
+            <div style="width:32px;height:32px;border-radius:50%;background:var(--gold-dim);display:flex;align-items:center;justify-content:center;font-weight:700;color:var(--gold);font-size:0.85rem;flex-shrink:0;">${(u.name||u.email||'?')[0].toUpperCase()}</div>
+            <div>
+              <div style="font-weight:500;font-size:0.88rem;">${escapeHtml(u.name||'—')}</div>
+              <div style="font-size:0.75rem;color:var(--text-muted);">${escapeHtml(u.email)}</div>
+            </div>
+          </div>
+        </td>
+        <td><span class="badge ${getPlanBadgeClass(u.plan)}">${u.plan||'free'}</span></td>
+        <td><span class="badge ${u.is_active ? 'badge-green' : 'badge-red'}">${u.is_active ? '● Active' : '○ Inactive'}</span></td>
+        <td style="font-size:0.82rem;color:var(--text-secondary);">${formatDate(u.created_at)}</td>
+        <td style="font-size:0.82rem;font-family:var(--font-mono);">${u.plan_expiry ? formatDate(u.plan_expiry) : '—'}</td>
+        <td style="font-family:var(--font-mono);font-size:0.85rem;">${formatCurrency(u.total_revenue||0)}</td>
+        <td>
+          <div style="display:flex;gap:6px;">
+            <button class="btn btn-ghost btn-sm" onclick="openUserModal('${u.uid}')">View</button>
+            <button class="btn btn-danger btn-sm" onclick="confirmDeleteUser('${u.uid}','${escapeHtml(u.email)}')">Del</button>
+          </div>
+        </td>
+      </tr>
+    `).join("");
+  } catch (err) {
+    tbody.innerHTML = `<tr><td colspan="7" style="text-align:center;color:var(--accent-red);padding:40px;">Failed to load users: ${err.message}</td></tr>`;
+  }
+}
+
+function changePage(dir) {
+  currentPage = Math.max(1, currentPage + dir);
+  loadUsersPage();
+}
+
+function applyFilters() {
+  currentPage = 1;
+  loadUsersPage();
+}
+
+function setupUserSearch() {
+  let t;
+  document.getElementById("user-search").addEventListener("input", () => {
+    clearTimeout(t);
+    t = setTimeout(() => { currentPage = 1; loadUsersPage(); }, 400);
+  });
+}
+
+async function openUserModal(uid) {
+  const modal = document.getElementById("user-modal");
+  const content = document.getElementById("user-modal-content");
+  content.innerHTML = `<div style="text-align:center;padding:32px;"><span class="spinner"></span></div>`;
+  modal.classList.add("active");
+
+  try {
+    const token = getStoredToken();
+    const res = await API.admin.getUsers({ uid }, token);
+    const u = res?.users?.[0];
+    if (!u) throw new Error("User not found");
+
+    content.innerHTML = `
+      <div style="display:flex;flex-direction:column;gap:14px;">
+        <div style="display:flex;gap:10px;flex-wrap:wrap;">
+          <span class="badge ${getPlanBadgeClass(u.plan)}">${u.plan||'free'}</span>
+          <span class="badge ${u.is_active?'badge-green':'badge-red'}">${u.is_active?'Active':'Inactive'}</span>
+          ${u.is_admin?'<span class="badge badge-red">Admin</span>':''}
+        </div>
+        ${[
+          ['Name', u.name||'—'],
+          ['Email', u.email],
+          ['UID', u.uid],
+          ['Joined', formatDate(u.created_at)],
+          ['Plan Expiry', u.plan_expiry ? formatDate(u.plan_expiry) : '—'],
+          ['Total Revenue', formatCurrency(u.total_revenue||0)],
+          ['Login Count', u.login_count||'—']
+        ].map(([k,v]) => `
+          <div style="display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--border);font-size:0.85rem;">
+            <span style="color:var(--text-muted);">${k}</span>
+            <span style="font-family:var(--font-mono);">${v}</span>
+          </div>
+        `).join("")}
+        <div style="display:flex;gap:10px;margin-top:8px;flex-wrap:wrap;">
+          <button class="btn btn-danger btn-sm" onclick="confirmDeleteUser('${u.uid}','${escapeHtml(u.email)}')">Delete User</button>
+          <button class="btn btn-ghost btn-sm" onclick="document.getElementById('user-modal').classList.remove('active')">Close</button>
+        </div>
+      </div>
+    `;
+  } catch (err) {
+    content.innerHTML = `<div style="color:var(--accent-red);padding:20px;">${err.message}</div>`;
+  }
+}
+</script>
+</body>
+</html>
