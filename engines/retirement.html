@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Retirement Planner — FinVest Pro</title>
+  <link rel="stylesheet" href="../assets/css/style.css">
+</head>
+<body>
+<nav class="navbar">
+  <a href="../dashboard/dashboard.html" class="navbar-logo"><div class="logo-icon">📈</div>FinVest Pro</a>
+  <div class="navbar-actions"><a href="../dashboard/dashboard.html" class="btn btn-ghost btn-sm">← Dashboard</a><button id="logout-btn" class="btn btn-ghost btn-sm">⏏</button></div>
+</nav>
+
+<div class="layout-dashboard">
+  <aside class="sidebar">
+    <div class="sidebar-section">
+      <a href="../dashboard/dashboard.html" class="sidebar-link"><span class="icon">🏠</span> Dashboard</a>
+    </div>
+    <div class="sidebar-section">
+      <div class="sidebar-label">Engines</div>
+      <a href="risk-profile.html" class="sidebar-link"><span class="icon">📊</span> Risk Profiler</a>
+      <a href="news.html" class="sidebar-link"><span class="icon">📰</span> Market News</a>
+      <a href="goal-planner.html" class="sidebar-link"><span class="icon">🎯</span> Goal Planner</a>
+      <a href="retirement.html" class="sidebar-link active"><span class="icon">🏖️</span> Retirement</a>
+      <a href="stock-analysis.html" class="sidebar-link" data-engine="stock-analysis"><span class="icon">📈</span> Stock Analysis</a>
+      <a href="portfolio.html" class="sidebar-link" data-engine="portfolio"><span class="icon">💼</span> Portfolio</a>
+      <a href="global-events.html" class="sidebar-link" data-engine="global-events"><span class="icon">🌐</span> Global Events</a>
+    </div>
+  </aside>
+
+  <main class="main-content">
+    <div style="max-width:860px;margin:0 auto;">
+      <div style="margin-bottom:28px;">
+        <div class="badge badge-blue" style="margin-bottom:12px;">🏖️ Basic+ Engine</div>
+        <h2 style="font-size:1.5rem;margin-bottom:6px;">Retirement Planner</h2>
+        <p style="color:var(--text-secondary);font-size:0.88rem;">Calculate your retirement corpus target and the SIP needed to get there.</p>
+      </div>
+
+      <div class="grid-2" style="gap:28px;align-items:start;">
+        <!-- Inputs -->
+        <div class="card">
+          <h3 style="font-size:1rem;margin-bottom:20px;">Your Details</h3>
+          <div style="display:flex;flex-direction:column;gap:16px;">
+            <div class="form-group">
+              <label class="form-label">Current Age</label>
+              <input type="number" id="r-current-age" class="form-input" value="30" min="18" max="65">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Retirement Age</label>
+              <input type="number" id="r-retire-age" class="form-input" value="60" min="40" max="75">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Life Expectancy</label>
+              <input type="number" id="r-life-exp" class="form-input" value="85" min="70" max="100">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Monthly Expenses Today (₹)</label>
+              <input type="number" id="r-monthly-exp" class="form-input" placeholder="e.g. 50000">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Expected Inflation (%/year)</label>
+              <input type="number" id="r-inflation" class="form-input" value="6" min="2" max="15" step="0.5">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Current Savings (₹)</label>
+              <input type="number" id="r-current-savings" class="form-input" value="0" min="0">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Expected Return (Pre-retirement %)</label>
+              <input type="number" id="r-return-pre" class="form-input" value="12" min="5" max="25" step="0.5">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Expected Return (Post-retirement %)</label>
+              <input type="number" id="r-return-post" class="form-input" value="7" min="3" max="15" step="0.5">
+            </div>
+            <button class="btn btn-primary btn-full" onclick="calculateRetirement()">Calculate</button>
+          </div>
+        </div>
+
+        <!-- Results -->
+        <div id="retire-result" style="display:none;">
+          <div class="card card-gold" style="margin-bottom:16px;">
+            <div class="section-label" style="margin-bottom:16px;">Your Retirement Plan</div>
+
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:20px;">
+              <div style="background:var(--bg-secondary);border-radius:var(--radius-md);padding:16px;text-align:center;">
+                <div style="font-size:0.7rem;color:var(--text-muted);margin-bottom:6px;">CORPUS NEEDED</div>
+                <div style="font-family:var(--font-mono);font-size:1.1rem;color:var(--gold);font-weight:500;" id="r-corpus">—</div>
+              </div>
+              <div style="background:var(--bg-secondary);border-radius:var(--radius-md);padding:16px;text-align:center;">
+                <div style="font-size:0.7rem;color:var(--text-muted);margin-bottom:6px;">MONTHLY SIP</div>
+                <div style="font-family:var(--font-mono);font-size:1.1rem;color:var(--accent-green);font-weight:500;" id="r-sip">—</div>
+              </div>
+              <div style="background:var(--bg-secondary);border-radius:var(--radius-md);padding:16px;text-align:center;">
+                <div style="font-size:0.7rem;color:var(--text-muted);margin-bottom:6px;">YEARS TO RETIRE</div>
+                <div style="font-family:var(--font-mono);font-size:1.1rem;color:var(--accent-blue);font-weight:500;" id="r-years">—</div>
+              </div>
+              <div style="background:var(--bg-secondary);border-radius:var(--radius-md);padding:16px;text-align:center;">
+                <div style="font-size:0.7rem;color:var(--text-muted);margin-bottom:6px;">RETIREMENT INCOME/MO</div>
+                <div style="font-family:var(--font-mono);font-size:1.1rem;font-weight:500;" id="r-income">—</div>
+              </div>
+            </div>
+
+            <!-- Milestones -->
+            <div style="background:var(--bg-secondary);border-radius:var(--radius-md);padding:16px;">
+              <div style="font-size:0.78rem;font-weight:600;color:var(--text-muted);margin-bottom:12px;text-transform:uppercase;letter-spacing:0.06em;">Key Milestones</div>
+              <div id="r-milestones" style="display:flex;flex-direction:column;gap:10px;"></div>
+            </div>
+          </div>
+
+          <div class="alert alert-warning" style="font-size:0.82rem;">
+            ⚠️ These are projections based on assumptions. Actual returns and inflation may vary. Consult a SEBI-registered financial advisor for personalized advice.
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>
+
+<div id="toast-container" class="toast-container"></div>
+<script src="../assets/js/api.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+<script src="../assets/js/auth.js"></script>
+<script src="../assets/js/dashboard.js"></script>
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  if (!requireAuth()) return;
+  if (!hasAccess("retirement")) { window.location.href = "../pricing.html"; return; }
+  setupSidebarLinks();
+});
+
+function calculateRetirement() {
+  const currentAge = parseInt(document.getElementById("r-current-age").value);
+  const retireAge = parseInt(document.getElementById("r-retire-age").value);
+  const lifeExp = parseInt(document.getElementById("r-life-exp").value);
+  const monthlyExp = parseFloat(document.getElementById("r-monthly-exp").value);
+  const inflation = parseFloat(document.getElementById("r-inflation").value) / 100;
+  const currentSavings = parseFloat(document.getElementById("r-current-savings").value) || 0;
+  const returnPre = parseFloat(document.getElementById("r-return-pre").value) / 100;
+  const returnPost = parseFloat(document.getElementById("r-return-post").value) / 100;
+
+  if (!monthlyExp || monthlyExp < 1000) { showToast("Enter valid monthly expenses", "error"); return; }
+  if (retireAge <= currentAge) { showToast("Retirement age must be after current age", "error"); return; }
+
+  const yearsToRetire = retireAge - currentAge;
+  const retirementYears = lifeExp - retireAge;
+
+  // Monthly expenses at retirement (inflation-adjusted)
+  const monthlyExpAtRetirement = monthlyExp * Math.pow(1 + inflation, yearsToRetire);
+
+  // Corpus needed using withdrawal formula (PV of annuity)
+  const rPost = returnPost / 12;
+  const nPost = retirementYears * 12;
+  const corpus = monthlyExpAtRetirement * ((1 - Math.pow(1 + rPost, -nPost)) / rPost);
+
+  // Future value of current savings
+  const futureSavings = currentSavings * Math.pow(1 + returnPre, yearsToRetire);
+  const remainingCorpus = Math.max(0, corpus - futureSavings);
+
+  // SIP needed
+  const rPre = returnPre / 12;
+  const nPre = yearsToRetire * 12;
+  const sip = remainingCorpus > 0
+    ? (remainingCorpus * rPre) / ((Math.pow(1 + rPre, nPre) - 1) * (1 + rPre))
+    : 0;
+
+  // Monthly income in retirement
+  const monthlyIncome = monthlyExpAtRetirement;
+
+  document.getElementById("retire-result").style.display = "block";
+  document.getElementById("r-corpus").textContent = formatCurrency(corpus);
+  document.getElementById("r-sip").textContent = formatCurrency(Math.ceil(sip)) + "/mo";
+  document.getElementById("r-years").textContent = yearsToRetire + " yrs";
+  document.getElementById("r-income").textContent = formatCurrency(monthlyIncome) + "/mo";
+
+  // Milestones
+  const milestones = [
+    { age: currentAge + Math.round(yearsToRetire * 0.25), label: "25% of journey", corpus: corpus * 0.15 },
+    { age: currentAge + Math.round(yearsToRetire * 0.5), label: "Halfway there", corpus: corpus * 0.4 },
+    { age: currentAge + Math.round(yearsToRetire * 0.75), label: "75% milestone", corpus: corpus * 0.75 },
+    { age: retireAge, label: "Retirement Day 🎉", corpus: corpus }
+  ];
+
+  document.getElementById("r-milestones").innerHTML = milestones.map(m => `
+    <div style="display:flex;justify-content:space-between;align-items:center;">
+      <div style="display:flex;align-items:center;gap:8px;">
+        <span style="font-family:var(--font-mono);font-size:0.78rem;color:var(--gold);min-width:40px;">Age ${m.age}</span>
+        <span style="font-size:0.82rem;color:var(--text-secondary);">${m.label}</span>
+      </div>
+      <span style="font-family:var(--font-mono);font-size:0.82rem;color:var(--accent-green);">${formatCurrency(m.corpus)}</span>
+    </div>
+  `).join("");
+
+  showToast("Retirement plan calculated!", "success");
+}
+</script>
+</body>
+</html>

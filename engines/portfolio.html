@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Portfolio Optimizer — FinVest Pro</title>
+  <link rel="stylesheet" href="../assets/css/style.css">
+</head>
+<body>
+<nav class="navbar">
+  <a href="../dashboard/dashboard.html" class="navbar-logo"><div class="logo-icon">📈</div>FinVest Pro</a>
+  <div class="navbar-actions"><a href="../dashboard/dashboard.html" class="btn btn-ghost btn-sm">← Dashboard</a><button id="logout-btn" class="btn btn-ghost btn-sm">⏏</button></div>
+</nav>
+
+<div class="layout-dashboard">
+  <aside class="sidebar">
+    <div class="sidebar-section"><a href="../dashboard/dashboard.html" class="sidebar-link"><span class="icon">🏠</span> Dashboard</a></div>
+    <div class="sidebar-section">
+      <div class="sidebar-label">Engines</div>
+      <a href="risk-profile.html" class="sidebar-link"><span class="icon">📊</span> Risk Profiler</a>
+      <a href="news.html" class="sidebar-link"><span class="icon">📰</span> Market News</a>
+      <a href="goal-planner.html" class="sidebar-link"><span class="icon">🎯</span> Goal Planner</a>
+      <a href="retirement.html" class="sidebar-link"><span class="icon">🏖️</span> Retirement</a>
+      <a href="stock-analysis.html" class="sidebar-link"><span class="icon">📈</span> Stock Analysis</a>
+      <a href="portfolio.html" class="sidebar-link active"><span class="icon">💼</span> Portfolio</a>
+      <a href="global-events.html" class="sidebar-link" data-engine="global-events"><span class="icon">🌐</span> Global Events</a>
+    </div>
+  </aside>
+
+  <main class="main-content">
+    <div style="max-width:900px;margin:0 auto;">
+      <div style="margin-bottom:24px;">
+        <div class="badge badge-gold" style="margin-bottom:12px;">💼 Pro Engine</div>
+        <h2 style="font-size:1.5rem;margin-bottom:6px;">Portfolio Optimizer</h2>
+        <p style="color:var(--text-secondary);font-size:0.88rem;">Build a diversified, optimized portfolio based on your risk profile and investment amount.</p>
+      </div>
+
+      <!-- Inputs -->
+      <div class="card" style="margin-bottom:24px;">
+        <h3 style="font-size:1rem;margin-bottom:20px;">Your Preferences</h3>
+        <div class="grid-3" style="gap:16px;margin-bottom:20px;">
+          <div class="form-group">
+            <label class="form-label">Investment Amount (₹)</label>
+            <input type="number" id="p-amount" class="form-input" placeholder="e.g. 100000" min="5000">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Risk Profile</label>
+            <select id="p-risk" class="form-input form-select">
+              <option value="conservative">Conservative</option>
+              <option value="moderate" selected>Moderate</option>
+              <option value="moderate-aggressive">Moderate-Aggressive</option>
+              <option value="aggressive">Aggressive</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Investment Horizon</label>
+            <select id="p-horizon" class="form-input form-select">
+              <option value="1">Short term (1 yr)</option>
+              <option value="3">Medium (3 yrs)</option>
+              <option value="5" selected>Long (5 yrs)</option>
+              <option value="10">Very Long (10+ yrs)</option>
+            </select>
+          </div>
+        </div>
+        <button class="btn btn-primary" onclick="optimizePortfolio()">Generate Portfolio</button>
+      </div>
+
+      <!-- Result -->
+      <div id="portfolio-result" style="display:none;">
+        <!-- Allocation Visual -->
+        <div class="card card-gold" style="margin-bottom:20px;">
+          <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-bottom:20px;">
+            <h3 style="font-size:1rem;">Recommended Allocation</h3>
+            <div id="p-risk-badge"></div>
+          </div>
+          <div id="p-allocation-bars"></div>
+        </div>
+
+        <!-- Holdings Table -->
+        <div class="card" style="margin-bottom:20px;">
+          <h3 style="font-size:1rem;margin-bottom:16px;">Specific Holdings</h3>
+          <div class="table-wrapper">
+            <table>
+              <thead>
+                <tr>
+                  <th>Asset / Fund</th>
+                  <th>Category</th>
+                  <th>Allocation</th>
+                  <th>Amount</th>
+                  <th>Expected Return</th>
+                </tr>
+              </thead>
+              <tbody id="p-holdings-body"></tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Expected Returns -->
+        <div class="grid-3" style="margin-bottom:20px;gap:16px;">
+          <div class="stat-card"><div class="stat-label">Expected CAGR</div><div class="stat-value" id="p-cagr" style="font-size:1.5rem;color:var(--gold);"></div></div>
+          <div class="stat-card"><div class="stat-label">Projected Value</div><div class="stat-value" id="p-projected" style="font-size:1.1rem;"></div><div class="stat-change" style="color:var(--text-muted);" id="p-horizon-label"></div></div>
+          <div class="stat-card"><div class="stat-label">Risk Level</div><div class="stat-value" id="p-risk-label" style="font-size:1rem;"></div></div>
+        </div>
+
+        <div class="alert alert-warning" style="font-size:0.82rem;">
+          ⚠️ This portfolio is a suggestion based on general principles. Actual returns vary. Not personalized financial advice.
+        </div>
+      </div>
+    </div>
+  </main>
+</div>
+
+<div id="toast-container" class="toast-container"></div>
+<script src="../assets/js/api.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+<script src="../assets/js/auth.js"></script>
+<script src="../assets/js/dashboard.js"></script>
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  if (!requireAuth()) return;
+  if (!hasAccess("portfolio")) { window.location.href = "../pricing.html"; return; }
+  setupSidebarLinks();
+});
+
+const PORTFOLIOS = {
+  conservative: {
+    cagr: 8, riskLabel: "Low Risk",
+    allocation: [
+      { name: "Debt Mutual Funds", pct: 40, color: "var(--accent-blue)", return: "7-8%" },
+      { name: "Fixed Deposits / Bonds", pct: 25, color: "var(--accent-cyan)", return: "6-7%" },
+      { name: "Gold ETF", pct: 20, color: "var(--gold)", return: "8-10%" },
+      { name: "Large Cap Equity MF", pct: 15, color: "var(--accent-green)", return: "10-12%" }
+    ]
+  },
+  moderate: {
+    cagr: 11, riskLabel: "Medium Risk",
+    allocation: [
+      { name: "Large Cap Equity MF", pct: 35, color: "var(--accent-green)", return: "10-12%" },
+      { name: "Debt / Hybrid Fund", pct: 25, color: "var(--accent-blue)", return: "7-8%" },
+      { name: "Mid Cap MF", pct: 20, color: "var(--gold)", return: "12-15%" },
+      { name: "Gold ETF", pct: 10, color: "var(--gold-light)", return: "8-10%" },
+      { name: "International Fund", pct: 10, color: "var(--accent-cyan)", return: "10-14%" }
+    ]
+  },
+  "moderate-aggressive": {
+    cagr: 13, riskLabel: "Moderate-High Risk",
+    allocation: [
+      { name: "Large + Mid Cap MF", pct: 45, color: "var(--accent-green)", return: "12-15%" },
+      { name: "Small Cap MF", pct: 20, color: "var(--gold)", return: "14-18%" },
+      { name: "International ETF", pct: 15, color: "var(--accent-cyan)", return: "10-14%" },
+      { name: "Sector Funds", pct: 10, color: "#F59E0B", return: "12-20%" },
+      { name: "Gold ETF", pct: 10, color: "var(--gold-light)", return: "8-10%" }
+    ]
+  },
+  aggressive: {
+    cagr: 16, riskLabel: "High Risk",
+    allocation: [
+      { name: "Mid + Small Cap MF", pct: 40, color: "var(--accent-green)", return: "14-20%" },
+      { name: "Direct Stocks", pct: 25, color: "var(--gold)", return: "15-25%" },
+      { name: "International Equity", pct: 15, color: "var(--accent-cyan)", return: "10-15%" },
+      { name: "Thematic / Sector MF", pct: 15, color: "#EC4899", return: "12-22%" },
+      { name: "Gold ETF", pct: 5, color: "var(--gold-light)", return: "8-10%" }
+    ]
+  }
+};
+
+function optimizePortfolio() {
+  const amount = parseFloat(document.getElementById("p-amount").value);
+  const risk = document.getElementById("p-risk").value;
+  const horizon = parseInt(document.getElementById("p-horizon").value);
+
+  if (!amount || amount < 5000) { showToast("Enter a valid amount (min ₹5,000)", "error"); return; }
+
+  const p = PORTFOLIOS[risk];
+  const projectedValue = amount * Math.pow(1 + p.cagr / 100, horizon);
+
+  document.getElementById("portfolio-result").style.display = "block";
+  document.getElementById("p-risk-badge").innerHTML = `<span class="badge badge-gold">${p.riskLabel}</span>`;
+  document.getElementById("p-cagr").textContent = p.cagr + "%";
+  document.getElementById("p-projected").textContent = formatCurrency(projectedValue);
+  document.getElementById("p-horizon-label").textContent = "in " + horizon + " year" + (horizon > 1 ? "s" : "");
+  document.getElementById("p-risk-label").textContent = p.riskLabel;
+
+  // Allocation bars
+  document.getElementById("p-allocation-bars").innerHTML = p.allocation.map(a => `
+    <div style="margin-bottom:14px;">
+      <div style="display:flex;justify-content:space-between;font-size:0.85rem;margin-bottom:6px;">
+        <span style="color:var(--text-secondary);">${a.name}</span>
+        <div style="display:flex;gap:12px;">
+          <span style="color:var(--text-muted);font-size:0.78rem;">${formatCurrency(amount * a.pct / 100)}</span>
+          <span style="color:${a.color};font-family:var(--font-mono);font-weight:600;">${a.pct}%</span>
+        </div>
+      </div>
+      <div class="progress-bar" style="height:8px;">
+        <div class="progress-fill" style="width:0%;background:${a.color};transition:width 1s ease;" data-width="${a.pct}"></div>
+      </div>
+    </div>
+  `).join("");
+
+  setTimeout(() => {
+    document.querySelectorAll("#p-allocation-bars .progress-fill").forEach(b => {
+      b.style.width = b.dataset.width + "%";
+    });
+  }, 100);
+
+  // Holdings table
+  document.getElementById("p-holdings-body").innerHTML = p.allocation.map(a => `
+    <tr>
+      <td style="font-weight:500;">${a.name}</td>
+      <td><span class="badge badge-gray" style="font-size:0.72rem;">${getCategoryLabel(a.name)}</span></td>
+      <td style="font-family:var(--font-mono);color:${a.color};">${a.pct}%</td>
+      <td style="font-family:var(--font-mono);">${formatCurrency(amount * a.pct / 100)}</td>
+      <td style="color:var(--accent-green);font-family:var(--font-mono);font-size:0.82rem;">${a.return}</td>
+    </tr>
+  `).join("");
+
+  showToast("Portfolio optimized!", "success");
+}
+
+function getCategoryLabel(name) {
+  if (name.includes("Equity") || name.includes("Cap")) return "Equity";
+  if (name.includes("Debt") || name.includes("Bond") || name.includes("FD")) return "Debt";
+  if (name.includes("Gold")) return "Commodity";
+  if (name.includes("International")) return "Global";
+  if (name.includes("Stock")) return "Equity";
+  return "Fund";
+}
+</script>
+</body>
+</html>

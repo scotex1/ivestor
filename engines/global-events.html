@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Global Events — FinVest Pro</title>
+  <link rel="stylesheet" href="../assets/css/style.css">
+</head>
+<body>
+<nav class="navbar">
+  <a href="../dashboard/dashboard.html" class="navbar-logo"><div class="logo-icon">📈</div>FinVest Pro</a>
+  <div class="navbar-actions"><a href="../dashboard/dashboard.html" class="btn btn-ghost btn-sm">← Dashboard</a><button id="logout-btn" class="btn btn-ghost btn-sm">⏏</button></div>
+</nav>
+
+<div class="layout-dashboard">
+  <aside class="sidebar">
+    <div class="sidebar-section"><a href="../dashboard/dashboard.html" class="sidebar-link"><span class="icon">🏠</span> Dashboard</a></div>
+    <div class="sidebar-section">
+      <div class="sidebar-label">Engines</div>
+      <a href="risk-profile.html" class="sidebar-link"><span class="icon">📊</span> Risk Profiler</a>
+      <a href="news.html" class="sidebar-link"><span class="icon">📰</span> Market News</a>
+      <a href="goal-planner.html" class="sidebar-link"><span class="icon">🎯</span> Goal Planner</a>
+      <a href="retirement.html" class="sidebar-link"><span class="icon">🏖️</span> Retirement</a>
+      <a href="stock-analysis.html" class="sidebar-link"><span class="icon">📈</span> Stock Analysis</a>
+      <a href="portfolio.html" class="sidebar-link"><span class="icon">💼</span> Portfolio</a>
+      <a href="global-events.html" class="sidebar-link active"><span class="icon">🌐</span> Global Events</a>
+    </div>
+  </aside>
+
+  <main class="main-content">
+    <div style="margin-bottom:24px;">
+      <div class="badge badge-gold" style="margin-bottom:12px;">🌐 Pro Engine</div>
+      <h2 style="font-size:1.5rem;margin-bottom:6px;">Global Events Tracker</h2>
+      <p style="color:var(--text-secondary);font-size:0.88rem;">Monitor macro events and understand their impact on Indian markets.</p>
+    </div>
+
+    <!-- Impact Summary Bar -->
+    <div class="card card-gold" style="margin-bottom:24px;">
+      <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px;">
+        <div>
+          <div style="font-size:0.78rem;color:var(--text-muted);margin-bottom:4px;">MARKET SENTIMENT TODAY</div>
+          <div style="display:flex;align-items:center;gap:12px;">
+            <span style="font-size:1.6rem;font-family:var(--font-mono);font-weight:500;color:var(--accent-green);">Cautiously Optimistic</span>
+            <span class="badge badge-green">📈 Positive</span>
+          </div>
+        </div>
+        <div style="display:flex;gap:20px;flex-wrap:wrap;">
+          <div style="text-align:center;">
+            <div style="font-size:0.7rem;color:var(--text-muted);">FII FLOW</div>
+            <div style="font-family:var(--font-mono);color:var(--accent-green);font-weight:600;">+₹4,200Cr</div>
+          </div>
+          <div style="text-align:center;">
+            <div style="font-size:0.7rem;color:var(--text-muted);">VIX</div>
+            <div style="font-family:var(--font-mono);color:var(--accent-green);font-weight:600;">13.4 (Low)</div>
+          </div>
+          <div style="text-align:center;">
+            <div style="font-size:0.7rem;color:var(--text-muted);">DXY</div>
+            <div style="font-family:var(--font-mono);font-weight:600;">104.2</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Events Grid -->
+    <div id="events-list" style="display:flex;flex-direction:column;gap:16px;"></div>
+  </main>
+</div>
+
+<div id="toast-container" class="toast-container"></div>
+<script src="../assets/js/api.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+<script src="../assets/js/auth.js"></script>
+<script src="../assets/js/dashboard.js"></script>
+<script>
+const EVENTS = [
+  {
+    flag: "🇺🇸", region: "United States",
+    event: "Federal Reserve FOMC Meeting — Rate Decision",
+    date: "Jan 29, 2025",
+    status: "upcoming",
+    impact: "high",
+    summary: "The Fed is expected to hold rates at 5.25–5.5%. Any dovish signal could trigger a rally in emerging markets including India.",
+    impact_india: { equity: "positive", debt: "positive", gold: "neutral", inr: "positive" }
+  },
+  {
+    flag: "🇮🇳", region: "India",
+    event: "Union Budget 2025–26 Presentation",
+    date: "Feb 1, 2025",
+    status: "upcoming",
+    impact: "high",
+    summary: "Finance Minister expected to focus on fiscal consolidation and capital expenditure. Watch for changes to LTCG tax, STT, and F&O regulations.",
+    impact_india: { equity: "high-impact", debt: "positive", gold: "neutral", inr: "neutral" }
+  },
+  {
+    flag: "🇨🇳", region: "China",
+    event: "China Q4 GDP Data Release",
+    date: "Jan 17, 2025",
+    status: "completed",
+    impact: "medium",
+    summary: "China GDP grew 4.9% YoY, slightly above expectations. Stronger Chinese demand supports commodities and IT outsourcing.",
+    impact_india: { equity: "positive", debt: "neutral", gold: "neutral", inr: "neutral" }
+  },
+  {
+    flag: "🇪🇺", region: "Eurozone",
+    event: "ECB Interest Rate Decision",
+    date: "Jan 25, 2025",
+    status: "upcoming",
+    impact: "medium",
+    summary: "European Central Bank expected to begin rate cuts. A weaker Euro supports USD strength which could pressure INR slightly.",
+    impact_india: { equity: "neutral", debt: "neutral", gold: "positive", inr: "negative" }
+  },
+  {
+    flag: "🛢️", region: "OPEC+",
+    event: "OPEC+ Output Decision",
+    date: "Feb 5, 2025",
+    status: "upcoming",
+    impact: "high",
+    summary: "OPEC+ meeting to decide on production cuts for Q2 2025. India imports 85% of oil — any price spike directly impacts inflation and CAD.",
+    impact_india: { equity: "negative", debt: "negative", gold: "positive", inr: "negative" }
+  },
+  {
+    flag: "🇯🇵", region: "Japan",
+    event: "Bank of Japan Rate Decision — Yen Carry Trade Watch",
+    date: "Jan 24, 2025",
+    status: "upcoming",
+    impact: "medium",
+    summary: "BoJ rate hike expectations growing. An unwinding of yen carry trades could trigger global FII outflows from emerging markets.",
+    impact_india: { equity: "negative", debt: "neutral", gold: "positive", inr: "negative" }
+  }
+];
+
+document.addEventListener("DOMContentLoaded", () => {
+  if (!requireAuth()) return;
+  if (!hasAccess("global-events")) { window.location.href = "../pricing.html"; return; }
+  setupSidebarLinks();
+  renderEvents();
+});
+
+function renderEvents() {
+  const impactColors = { high: "badge-red", medium: "badge-gold", low: "badge-blue" };
+  const statusColors = { upcoming: "badge-blue", completed: "badge-green", ongoing: "badge-gold" };
+  const signalIcon = { positive: "▲", negative: "▼", neutral: "—", "high-impact": "⚡" };
+  const signalColor = { positive: "var(--accent-green)", negative: "var(--accent-red)", neutral: "var(--text-muted)", "high-impact": "var(--gold)" };
+
+  document.getElementById("events-list").innerHTML = EVENTS.map(e => `
+    <div class="card ${e.impact === 'high' ? 'card-gold' : ''}">
+      <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-bottom:14px;">
+        <div style="display:flex;align-items:center;gap:12px;">
+          <span style="font-size:1.8rem;">${e.flag}</span>
+          <div>
+            <div style="font-size:0.75rem;color:var(--text-muted);margin-bottom:3px;">${e.region}</div>
+            <h3 style="font-size:0.97rem;color:var(--text-primary);line-height:1.4;">${e.event}</h3>
+          </div>
+        </div>
+        <div style="display:flex;gap:8px;align-items:center;flex-shrink:0;flex-wrap:wrap;">
+          <span class="badge ${statusColors[e.status]}">${e.status}</span>
+          <span class="badge ${impactColors[e.impact]}">${e.impact} impact</span>
+          <span style="font-family:var(--font-mono);font-size:0.75rem;color:var(--text-muted);">${e.date}</span>
+        </div>
+      </div>
+
+      <p style="color:var(--text-secondary);font-size:0.85rem;line-height:1.6;margin-bottom:16px;">${e.summary}</p>
+
+      <div style="background:var(--bg-secondary);border-radius:var(--radius-md);padding:12px 16px;">
+        <div style="font-size:0.72rem;color:var(--text-muted);margin-bottom:10px;text-transform:uppercase;letter-spacing:0.08em;">Impact on Indian Markets</div>
+        <div style="display:flex;gap:20px;flex-wrap:wrap;">
+          ${Object.entries(e.impact_india).map(([asset, signal]) => `
+            <div style="text-align:center;">
+              <div style="font-size:0.68rem;color:var(--text-muted);margin-bottom:3px;">${asset.toUpperCase()}</div>
+              <div style="font-size:1rem;color:${signalColor[signal]};font-weight:700;">${signalIcon[signal]}</div>
+            </div>
+          `).join("")}
+        </div>
+      </div>
+    </div>
+  `).join("");
+}
+</script>
+</body>
+</html>

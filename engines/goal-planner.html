@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Goal Planner — FinVest Pro</title>
+  <link rel="stylesheet" href="../assets/css/style.css">
+</head>
+<body>
+<nav class="navbar">
+  <a href="../dashboard/dashboard.html" class="navbar-logo"><div class="logo-icon">📈</div>FinVest Pro</a>
+  <div class="navbar-actions">
+    <a href="../dashboard/dashboard.html" class="btn btn-ghost btn-sm">← Dashboard</a>
+    <button id="logout-btn" class="btn btn-ghost btn-sm">⏏</button>
+  </div>
+</nav>
+
+<div class="layout-dashboard">
+  <aside class="sidebar">
+    <div class="sidebar-section">
+      <a href="../dashboard/dashboard.html" class="sidebar-link"><span class="icon">🏠</span> Dashboard</a>
+    </div>
+    <div class="sidebar-section">
+      <div class="sidebar-label">Engines</div>
+      <a href="risk-profile.html" class="sidebar-link"><span class="icon">📊</span> Risk Profiler</a>
+      <a href="news.html" class="sidebar-link"><span class="icon">📰</span> Market News</a>
+      <a href="goal-planner.html" class="sidebar-link active"><span class="icon">🎯</span> Goal Planner</a>
+      <a href="retirement.html" class="sidebar-link"><span class="icon">🏖️</span> Retirement</a>
+      <a href="stock-analysis.html" class="sidebar-link" data-engine="stock-analysis"><span class="icon">📈</span> Stock Analysis</a>
+      <a href="portfolio.html" class="sidebar-link" data-engine="portfolio"><span class="icon">💼</span> Portfolio</a>
+      <a href="global-events.html" class="sidebar-link" data-engine="global-events"><span class="icon">🌐</span> Global Events</a>
+    </div>
+  </aside>
+
+  <main class="main-content">
+    <div style="max-width:860px;margin:0 auto;">
+      <div style="margin-bottom:28px;">
+        <div class="badge badge-blue" style="margin-bottom:12px;">🎯 Basic+ Engine</div>
+        <h2 style="font-size:1.5rem;margin-bottom:6px;">Goal Planner</h2>
+        <p style="color:var(--text-secondary);font-size:0.88rem;">Define financial goals and get a precise SIP/lumpsum plan to achieve them.</p>
+      </div>
+
+      <div class="grid-2" style="gap:28px;align-items:start;">
+
+        <!-- Input Panel -->
+        <div class="card">
+          <h3 style="font-size:1rem;margin-bottom:20px;">Add a Goal</h3>
+          <div style="display:flex;flex-direction:column;gap:16px;">
+            <div class="form-group">
+              <label class="form-label">Goal Type</label>
+              <select id="goal-type" class="form-input form-select" onchange="updateGoalIcon()">
+                <option value="home">🏠 Buy a Home</option>
+                <option value="car">🚗 Buy a Car</option>
+                <option value="education">🎓 Child's Education</option>
+                <option value="wedding">💍 Wedding</option>
+                <option value="travel">✈️ Dream Vacation</option>
+                <option value="emergency">🛡️ Emergency Fund</option>
+                <option value="business">💼 Start a Business</option>
+                <option value="custom">🎯 Custom Goal</option>
+              </select>
+            </div>
+            <div class="form-group" id="custom-goal-name-group" style="display:none;">
+              <label class="form-label">Goal Name</label>
+              <input type="text" id="custom-goal-name" class="form-input" placeholder="e.g. World Tour 2027">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Target Amount (₹)</label>
+              <input type="number" id="goal-amount" class="form-input" placeholder="e.g. 5000000" min="1000">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Target Date</label>
+              <input type="month" id="goal-date" class="form-input">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Amount Already Saved (₹)</label>
+              <input type="number" id="goal-saved" class="form-input" placeholder="0 if starting fresh" value="0" min="0">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Expected Annual Return (%)</label>
+              <input type="number" id="goal-return" class="form-input" value="12" min="1" max="30" step="0.5">
+              <span class="form-hint">Equity MFs historically ~12%, FD ~7%</span>
+            </div>
+            <button class="btn btn-primary btn-full" onclick="calculateGoal()">Calculate Plan</button>
+          </div>
+        </div>
+
+        <!-- Result Panel -->
+        <div>
+          <div class="card card-gold" id="goal-result" style="display:none;margin-bottom:20px;">
+            <div style="display:flex;align-items:center;gap:12px;margin-bottom:20px;">
+              <div id="goal-result-icon" style="font-size:2rem;"></div>
+              <div>
+                <div style="font-size:0.78rem;color:var(--text-muted);">GOAL PLAN</div>
+                <div style="font-weight:700;font-size:1.1rem;" id="goal-result-name"></div>
+              </div>
+            </div>
+
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:20px;">
+              <div style="background:var(--bg-secondary);border-radius:var(--radius-md);padding:14px;text-align:center;">
+                <div style="font-size:0.72rem;color:var(--text-muted);margin-bottom:4px;">REQUIRED SIP</div>
+                <div style="font-family:var(--font-mono);font-size:1.3rem;color:var(--gold);font-weight:500;" id="result-sip">—</div>
+                <div style="font-size:0.7rem;color:var(--text-muted);">per month</div>
+              </div>
+              <div style="background:var(--bg-secondary);border-radius:var(--radius-md);padding:14px;text-align:center;">
+                <div style="font-size:0.72rem;color:var(--text-muted);margin-bottom:4px;">TIME HORIZON</div>
+                <div style="font-family:var(--font-mono);font-size:1.3rem;color:var(--accent-blue);font-weight:500;" id="result-months">—</div>
+                <div style="font-size:0.7rem;color:var(--text-muted);">months</div>
+              </div>
+              <div style="background:var(--bg-secondary);border-radius:var(--radius-md);padding:14px;text-align:center;">
+                <div style="font-size:0.72rem;color:var(--text-muted);margin-bottom:4px;">TOTAL INVESTED</div>
+                <div style="font-family:var(--font-mono);font-size:1.1rem;font-weight:500;" id="result-invested">—</div>
+              </div>
+              <div style="background:var(--bg-secondary);border-radius:var(--radius-md);padding:14px;text-align:center;">
+                <div style="font-size:0.72rem;color:var(--text-muted);margin-bottom:4px;">RETURNS EARNED</div>
+                <div style="font-family:var(--font-mono);font-size:1.1rem;color:var(--accent-green);font-weight:500;" id="result-returns">—</div>
+              </div>
+            </div>
+
+            <!-- Progress toward goal -->
+            <div style="margin-bottom:16px;">
+              <div style="display:flex;justify-content:space-between;font-size:0.78rem;margin-bottom:6px;">
+                <span style="color:var(--text-muted);">Current savings</span>
+                <span style="color:var(--gold);" id="result-progress-pct">0%</span>
+              </div>
+              <div class="progress-bar" style="height:8px;">
+                <div class="progress-fill" id="result-progress-bar" style="width:0%;transition:width 1s ease;"></div>
+              </div>
+            </div>
+
+            <button class="btn btn-outline btn-full btn-sm" onclick="addGoalToList()">+ Save This Goal</button>
+          </div>
+
+          <!-- Saved Goals -->
+          <div class="card" id="saved-goals-section" style="display:none;">
+            <h3 style="font-size:0.95rem;margin-bottom:16px;">Saved Goals</h3>
+            <div id="saved-goals-list" style="display:flex;flex-direction:column;gap:10px;"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>
+
+<div id="toast-container" class="toast-container"></div>
+<script src="../assets/js/api.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+<script src="../assets/js/auth.js"></script>
+<script src="../assets/js/dashboard.js"></script>
+<script>
+const GOAL_ICONS = { home:"🏠", car:"🚗", education:"🎓", wedding:"💍", travel:"✈️", emergency:"🛡️", business:"💼", custom:"🎯" };
+const savedGoals = [];
+let currentResult = null;
+
+document.addEventListener("DOMContentLoaded", () => {
+  if (!requireAuth()) return;
+  if (!hasAccess("goal-planner")) { window.location.href = "../pricing.html"; return; }
+  setupSidebarLinks();
+
+  // Set min month to next month
+  const d = new Date();
+  d.setMonth(d.getMonth() + 1);
+  document.getElementById("goal-date").min = d.toISOString().slice(0,7);
+  document.getElementById("goal-date").value = new Date(Date.now() + 3*365*24*60*60*1000).toISOString().slice(0,7);
+});
+
+document.getElementById("goal-type").addEventListener("change", function() {
+  document.getElementById("custom-goal-name-group").style.display = this.value === "custom" ? "flex" : "none";
+});
+
+function calculateGoal() {
+  const type = document.getElementById("goal-type").value;
+  const amount = parseFloat(document.getElementById("goal-amount").value);
+  const dateStr = document.getElementById("goal-date").value;
+  const saved = parseFloat(document.getElementById("goal-saved").value) || 0;
+  const annualReturn = parseFloat(document.getElementById("goal-return").value) || 12;
+
+  if (!amount || amount < 1000) { showToast("Enter a valid target amount", "error"); return; }
+  if (!dateStr) { showToast("Select a target date", "error"); return; }
+
+  const targetDate = new Date(dateStr + "-01");
+  const now = new Date();
+  const months = Math.max(1, Math.round((targetDate - now) / (1000 * 60 * 60 * 24 * 30.4)));
+
+  const r = annualReturn / 100 / 12;
+  const remaining = amount - saved;
+
+  // SIP formula: FV = P * [((1+r)^n - 1) / r] * (1+r)
+  // Solving for P: P = FV * r / [((1+r)^n - 1) * (1+r)]
+  let sip = 0;
+  if (remaining > 0) {
+    sip = (remaining * r) / (((Math.pow(1 + r, months) - 1)) * (1 + r));
+  }
+
+  const totalInvested = sip * months;
+  const returns = amount - saved - totalInvested;
+  const progressPct = Math.min(100, Math.round((saved / amount) * 100));
+
+  const goalName = type === "custom"
+    ? (document.getElementById("custom-goal-name").value || "Custom Goal")
+    : document.getElementById("goal-type").selectedOptions[0].text;
+
+  currentResult = { type, amount, months, sip, totalInvested, returns, saved, goalName, annualReturn };
+
+  // Show result
+  document.getElementById("goal-result").style.display = "block";
+  document.getElementById("goal-result-icon").textContent = GOAL_ICONS[type] || "🎯";
+  document.getElementById("goal-result-name").textContent = goalName;
+  document.getElementById("result-sip").textContent = formatCurrency(Math.ceil(sip));
+  document.getElementById("result-months").textContent = months;
+  document.getElementById("result-invested").textContent = formatCurrency(totalInvested);
+  document.getElementById("result-returns").textContent = formatCurrency(Math.max(0, returns));
+  document.getElementById("result-progress-pct").textContent = progressPct + "%";
+
+  setTimeout(() => {
+    document.getElementById("result-progress-bar").style.width = progressPct + "%";
+  }, 100);
+
+  showToast("Goal calculated! SIP required: " + formatCurrency(Math.ceil(sip)) + "/month", "success");
+}
+
+function addGoalToList() {
+  if (!currentResult) return;
+  savedGoals.push({ ...currentResult, id: Date.now() });
+  renderSavedGoals();
+  showToast("Goal saved!", "success");
+}
+
+function renderSavedGoals() {
+  const section = document.getElementById("saved-goals-section");
+  const list = document.getElementById("saved-goals-list");
+  if (!savedGoals.length) { section.style.display = "none"; return; }
+
+  section.style.display = "block";
+  list.innerHTML = savedGoals.map(g => `
+    <div style="display:flex;align-items:center;justify-content:space-between;padding:12px 14px;background:var(--bg-secondary);border-radius:var(--radius-md);gap:12px;">
+      <div style="display:flex;align-items:center;gap:10px;">
+        <span style="font-size:1.2rem;">${GOAL_ICONS[g.type]||"🎯"}</span>
+        <div>
+          <div style="font-weight:600;font-size:0.85rem;">${g.goalName}</div>
+          <div style="font-size:0.75rem;color:var(--text-muted);">${formatCurrency(g.amount)} in ${g.months}mo</div>
+        </div>
+      </div>
+      <div style="text-align:right;">
+        <div style="font-family:var(--font-mono);font-size:0.9rem;color:var(--gold);">${formatCurrency(Math.ceil(g.sip))}</div>
+        <div style="font-size:0.7rem;color:var(--text-muted);">/ month</div>
+      </div>
+    </div>
+  `).join("");
+}
+</script>
+</body>
+</html>

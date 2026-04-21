@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Risk Profiler — FinVest Pro</title>
+  <link rel="stylesheet" href="../assets/css/style.css">
+</head>
+<body>
+
+<nav class="navbar">
+  <a href="../dashboard/dashboard.html" class="navbar-logo"><div class="logo-icon">📈</div>FinVest Pro</a>
+  <div class="navbar-actions">
+    <a href="../dashboard/dashboard.html" class="btn btn-ghost btn-sm">← Dashboard</a>
+    <button id="logout-btn" class="btn btn-ghost btn-sm">⏏</button>
+  </div>
+</nav>
+
+<div class="layout-dashboard">
+  <aside class="sidebar">
+    <div class="sidebar-section">
+      <a href="../dashboard/dashboard.html" class="sidebar-link"><span class="icon">🏠</span> Dashboard</a>
+    </div>
+    <div class="sidebar-section">
+      <div class="sidebar-label">Free Engines</div>
+      <a href="risk-profile.html" class="sidebar-link active"><span class="icon">📊</span> Risk Profiler</a>
+      <a href="news.html" class="sidebar-link"><span class="icon">📰</span> Market News</a>
+    </div>
+    <div class="sidebar-section">
+      <div class="sidebar-label">Premium</div>
+      <a href="goal-planner.html" class="sidebar-link" data-engine="goal-planner"><span class="icon">🎯</span> Goal Planner</a>
+      <a href="retirement.html" class="sidebar-link" data-engine="retirement"><span class="icon">🏖️</span> Retirement</a>
+      <a href="stock-analysis.html" class="sidebar-link" data-engine="stock-analysis"><span class="icon">📈</span> Stock Analysis</a>
+      <a href="portfolio.html" class="sidebar-link" data-engine="portfolio"><span class="icon">💼</span> Portfolio</a>
+      <a href="global-events.html" class="sidebar-link" data-engine="global-events"><span class="icon">🌐</span> Global Events</a>
+    </div>
+  </aside>
+
+  <main class="main-content">
+    <div style="max-width:680px;margin:0 auto;">
+
+      <!-- Header -->
+      <div style="margin-bottom:32px;">
+        <div class="badge badge-green" style="margin-bottom:12px;">📊 Free Engine</div>
+        <h2 style="font-size:1.6rem;margin-bottom:8px;">Risk Profiler</h2>
+        <p style="color:var(--text-secondary);font-size:0.9rem;line-height:1.6;">
+          Answer 10 questions to discover your investment risk tolerance and get a personalized investor profile with recommended asset allocation.
+        </p>
+      </div>
+
+      <!-- Quiz Container -->
+      <div id="quiz-container">
+
+        <!-- Progress -->
+        <div style="margin-bottom:28px;">
+          <div style="display:flex;justify-content:space-between;margin-bottom:8px;">
+            <span style="font-size:0.82rem;color:var(--text-muted);">Question <span id="q-current">1</span> of 10</span>
+            <span style="font-size:0.82rem;color:var(--gold);" id="q-percent">0%</span>
+          </div>
+          <div class="progress-bar" style="height:8px;">
+            <div class="progress-fill" id="q-progress" style="width:0%;transition:width 0.4s ease;"></div>
+          </div>
+        </div>
+
+        <!-- Question Card -->
+        <div class="card card-gold" id="question-card">
+          <div style="font-size:0.78rem;color:var(--text-muted);margin-bottom:12px;font-family:var(--font-mono);">QUESTION 1</div>
+          <h3 id="question-text" style="font-size:1.1rem;margin-bottom:24px;line-height:1.5;"></h3>
+
+          <div id="options-container" style="display:flex;flex-direction:column;gap:10px;"></div>
+
+          <div style="display:flex;justify-content:space-between;margin-top:28px;">
+            <button id="prev-btn" class="btn btn-ghost btn-sm" onclick="prevQuestion()" style="display:none;">← Back</button>
+            <div></div>
+            <button id="next-btn" class="btn btn-primary btn-sm" onclick="nextQuestion()" disabled>Next →</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Result Container (hidden initially) -->
+      <div id="result-container" style="display:none;">
+        <div class="card card-gold" style="text-align:center;padding:40px;">
+          <div id="result-emoji" style="font-size:4rem;margin-bottom:16px;"></div>
+          <div class="badge badge-gold" style="margin-bottom:16px;" id="result-type"></div>
+          <h2 id="result-title" style="margin-bottom:12px;"></h2>
+          <p id="result-desc" style="color:var(--text-secondary);max-width:480px;margin:0 auto 32px;line-height:1.7;font-size:0.9rem;"></p>
+
+          <!-- Score Gauge -->
+          <div style="background:var(--bg-secondary);border-radius:var(--radius-md);padding:24px;margin-bottom:28px;">
+            <div style="font-size:0.78rem;color:var(--text-muted);margin-bottom:8px;">Your Risk Score</div>
+            <div id="result-score" style="font-size:3rem;font-family:var(--font-mono);font-weight:500;color:var(--gold);margin-bottom:8px;"></div>
+            <div class="progress-bar" style="height:12px;max-width:300px;margin:0 auto;">
+              <div class="progress-fill" id="result-progress" style="width:0%;transition:width 1s ease 0.3s;"></div>
+            </div>
+            <div style="display:flex;justify-content:space-between;max-width:300px;margin:8px auto 0;font-size:0.72rem;color:var(--text-muted);">
+              <span>Conservative</span>
+              <span>Aggressive</span>
+            </div>
+          </div>
+
+          <!-- Recommended Allocation -->
+          <div style="background:var(--bg-secondary);border-radius:var(--radius-md);padding:20px;margin-bottom:28px;text-align:left;">
+            <div style="font-size:0.82rem;font-weight:600;color:var(--text-muted);margin-bottom:14px;text-transform:uppercase;letter-spacing:0.06em;">Recommended Allocation</div>
+            <div id="allocation-bars"></div>
+          </div>
+
+          <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;">
+            <button onclick="retakeQuiz()" class="btn btn-ghost">Retake Quiz</button>
+            <a href="../dashboard/dashboard.html" class="btn btn-primary">Go to Dashboard</a>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </main>
+</div>
+
+<div id="toast-container" class="toast-container"></div>
+
+<script src="../assets/js/api.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+<script src="../assets/js/auth.js"></script>
+<script src="../assets/js/dashboard.js"></script>
+
+<script>
+const QUESTIONS = [
+  {
+    text: "What is your primary investment goal?",
+    options: [
+      { text: "Preserve my capital — safety above all", score: 1 },
+      { text: "Earn steady income with low risk", score: 2 },
+      { text: "Balance of growth and stability", score: 3 },
+      { text: "Maximize long-term growth, accept volatility", score: 4 }
+    ]
+  },
+  {
+    text: "How long can you keep your money invested?",
+    options: [
+      { text: "Less than 1 year", score: 1 },
+      { text: "1 to 3 years", score: 2 },
+      { text: "3 to 7 years", score: 3 },
+      { text: "More than 7 years", score: 4 }
+    ]
+  },
+  {
+    text: "If your portfolio dropped 20% in a month, you would:",
+    options: [
+      { text: "Sell everything immediately", score: 1 },
+      { text: "Worry a lot but hold on", score: 2 },
+      { text: "Stay calm — this is expected", score: 3 },
+      { text: "Buy more — a great opportunity!", score: 4 }
+    ]
+  },
+  {
+    text: "What is your current financial situation?",
+    options: [
+      { text: "Very tight — no emergency fund", score: 1 },
+      { text: "Stable with small savings buffer", score: 2 },
+      { text: "Comfortable with 6+ months emergency fund", score: 3 },
+      { text: "Strong financial base, multiple income streams", score: 4 }
+    ]
+  },
+  {
+    text: "What percentage of your income do you invest monthly?",
+    options: [
+      { text: "Less than 5%", score: 1 },
+      { text: "5% to 15%", score: 2 },
+      { text: "15% to 30%", score: 3 },
+      { text: "More than 30%", score: 4 }
+    ]
+  },
+  {
+    text: "How experienced are you with investing?",
+    options: [
+      { text: "Complete beginner", score: 1 },
+      { text: "Some FD/mutual fund experience", score: 2 },
+      { text: "Comfortable with stocks and MFs", score: 3 },
+      { text: "Experienced with multiple asset classes", score: 4 }
+    ]
+  },
+  {
+    text: "Which investment return scenario do you prefer?",
+    options: [
+      { text: "Guaranteed 6% — no risk", score: 1 },
+      { text: "Likely 9% with possible 2% loss", score: 2 },
+      { text: "Expected 14% with possible 10% loss", score: 3 },
+      { text: "Possible 25% with possible 20% loss", score: 4 }
+    ]
+  },
+  {
+    text: "How do you react to daily market news?",
+    options: [
+      { text: "Very anxious — check portfolio constantly", score: 1 },
+      { text: "Slightly nervous but manageable", score: 2 },
+      { text: "Curious but not emotional", score: 3 },
+      { text: "Indifferent — focused on long-term", score: 4 }
+    ]
+  },
+  {
+    text: "What is your age range?",
+    options: [
+      { text: "55+ years", score: 1 },
+      { text: "45–54 years", score: 2 },
+      { text: "30–44 years", score: 3 },
+      { text: "Under 30 years", score: 4 }
+    ]
+  },
+  {
+    text: "Do you have existing debt (loans, EMIs)?",
+    options: [
+      { text: "High debt — over 50% of income", score: 1 },
+      { text: "Moderate — 20–50% of income", score: 2 },
+      { text: "Low — under 20% of income", score: 3 },
+      { text: "Debt-free", score: 4 }
+    ]
+  }
+];
+
+const PROFILES = [
+  {
+    min: 10, max: 16,
+    type: "Conservative",
+    emoji: "🛡️",
+    title: "Conservative Investor",
+    desc: "You prioritize capital protection and stable returns over growth. Your portfolio should focus on safety, liquidity, and steady income.",
+    allocation: { "FD / Debt Funds": 50, "Gold / Bonds": 25, "Large Cap Equity": 15, "Other": 10 }
+  },
+  {
+    min: 17, max: 24,
+    type: "Moderate",
+    emoji: "⚖️",
+    title: "Moderate Investor",
+    desc: "You seek a balance between growth and stability. You can accept some volatility for better long-term returns.",
+    allocation: { "Large Cap Equity": 35, "Debt Funds": 30, "Mid Cap Equity": 20, "Gold / REITs": 15 }
+  },
+  {
+    min: 25, max: 32,
+    type: "Moderate-Aggressive",
+    emoji: "📈",
+    title: "Moderate-Aggressive Investor",
+    desc: "You're comfortable with market volatility and seek above-average returns. A diversified equity-heavy portfolio suits you.",
+    allocation: { "Large + Mid Cap Equity": 55, "Small Cap": 20, "Debt Funds": 15, "Gold": 10 }
+  },
+  {
+    min: 33, max: 40,
+    type: "Aggressive",
+    emoji: "🚀",
+    title: "Aggressive Investor",
+    desc: "You have a high risk appetite and long time horizon. You're focused on maximizing wealth creation and can handle significant drawdowns.",
+    allocation: { "Diversified Equity": 70, "Small Cap / Mid Cap": 20, "International Equity": 7, "Gold": 3 }
+  }
+];
+
+let currentQ = 0;
+let answers = new Array(QUESTIONS.length).fill(null);
+
+function renderQuestion() {
+  const q = QUESTIONS[currentQ];
+  document.getElementById("q-current").textContent = currentQ + 1;
+  const pct = Math.round((currentQ / QUESTIONS.length) * 100);
+  document.getElementById("q-percent").textContent = pct + "%";
+  document.getElementById("q-progress").style.width = pct + "%";
+  document.getElementById("question-text").textContent = q.text;
+  document.querySelector(".card-gold > div:first-child").textContent = `QUESTION ${currentQ + 1}`;
+
+  const container = document.getElementById("options-container");
+  container.innerHTML = q.options.map((opt, i) => `
+    <button
+      class="btn btn-ghost"
+      style="text-align:left;justify-content:flex-start;padding:14px 18px;${answers[currentQ] === i ? 'border-color:var(--gold);background:var(--gold-dim);color:var(--text-primary);' : ''}"
+      onclick="selectOption(${i})"
+    >
+      <span style="width:22px;height:22px;border-radius:50%;border:1.5px solid ${answers[currentQ] === i ? 'var(--gold)' : 'var(--border)'};display:inline-flex;align-items:center;justify-content:center;flex-shrink:0;font-size:0.7rem;color:${answers[currentQ] === i ? 'var(--gold)' : 'transparent'};background:${answers[currentQ] === i ? 'var(--gold-dim)' : 'transparent'};margin-right:2px;">●</span>
+      ${opt.text}
+    </button>
+  `).join("");
+
+  document.getElementById("prev-btn").style.display = currentQ > 0 ? "flex" : "none";
+  document.getElementById("next-btn").disabled = answers[currentQ] === null;
+  document.getElementById("next-btn").textContent = currentQ === QUESTIONS.length - 1 ? "See Results →" : "Next →";
+}
+
+function selectOption(idx) {
+  answers[currentQ] = idx;
+  renderQuestion();
+}
+
+function nextQuestion() {
+  if (answers[currentQ] === null) return;
+  if (currentQ < QUESTIONS.length - 1) {
+    currentQ++;
+    renderQuestion();
+  } else {
+    showResult();
+  }
+}
+
+function prevQuestion() {
+  if (currentQ > 0) {
+    currentQ--;
+    renderQuestion();
+  }
+}
+
+function showResult() {
+  const totalScore = answers.reduce((sum, ansIdx, qIdx) => {
+    return sum + (ansIdx !== null ? QUESTIONS[qIdx].options[ansIdx].score : 0);
+  }, 0);
+
+  const profile = PROFILES.find(p => totalScore >= p.min && totalScore <= p.max) || PROFILES[1];
+  const pct = Math.round(((totalScore - 10) / 30) * 100);
+
+  document.getElementById("quiz-container").style.display = "none";
+  const result = document.getElementById("result-container");
+  result.style.display = "block";
+
+  document.getElementById("result-emoji").textContent = profile.emoji;
+  document.getElementById("result-type").textContent = profile.type;
+  document.getElementById("result-title").textContent = profile.title;
+  document.getElementById("result-desc").textContent = profile.desc;
+  document.getElementById("result-score").textContent = `${totalScore} / 40`;
+
+  setTimeout(() => {
+    document.getElementById("result-progress").style.width = pct + "%";
+  }, 100);
+
+  // Allocation bars
+  const colors = ["var(--gold)", "var(--accent-blue)", "var(--accent-green)", "var(--accent-cyan)"];
+  document.getElementById("allocation-bars").innerHTML = Object.entries(profile.allocation).map(([label, pct], i) => `
+    <div style="margin-bottom:12px;">
+      <div style="display:flex;justify-content:space-between;font-size:0.83rem;margin-bottom:5px;">
+        <span style="color:var(--text-secondary);">${label}</span>
+        <span style="color:${colors[i]};font-family:var(--font-mono);font-weight:600;">${pct}%</span>
+      </div>
+      <div class="progress-bar"><div class="progress-fill" style="width:0%;background:${colors[i]};transition:width 1s ease ${0.2 + i * 0.15}s;"></div></div>
+    </div>
+  `).join("");
+
+  setTimeout(() => {
+    document.querySelectorAll("#allocation-bars .progress-fill").forEach((bar, i) => {
+      bar.style.width = Object.values(profile.allocation)[i] + "%";
+    });
+  }, 200);
+
+  // Save to backend
+  const token = getStoredToken();
+  if (token) {
+    API.getRiskProfile({ score: totalScore, profile: profile.type, answers }, token).catch(console.warn);
+  }
+}
+
+function retakeQuiz() {
+  answers = new Array(QUESTIONS.length).fill(null);
+  currentQ = 0;
+  document.getElementById("result-container").style.display = "none";
+  document.getElementById("quiz-container").style.display = "block";
+  renderQuestion();
+}
+
+// Init
+document.addEventListener("DOMContentLoaded", () => {
+  if (!requireAuth()) return;
+  setupSidebarLinks();
+  renderQuestion();
+});
+</script>
+</body>
+</html>
