@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Support — FinVest Pro</title>
+  <link rel="stylesheet" href="../assets/css/style.css">
+</head>
+<body>
+<nav class="navbar">
+  <a href="../index.html" class="navbar-logo"><div class="logo-icon">📈</div>FinVest Pro</a>
+  <div class="navbar-actions">
+    <a href="../index.html" class="btn btn-ghost btn-sm">← Home</a>
+    <a href="../contact.html" class="btn btn-primary btn-sm">Contact Us</a>
+  </div>
+</nav>
+
+<section class="section">
+  <div class="container" style="max-width:900px;">
+    <div style="text-align:center;margin-bottom:56px;">
+      <div class="section-label" style="justify-content:center;">Help Center</div>
+      <h1 style="font-size:2.2rem;margin-bottom:12px;">How can we help you?</h1>
+      <p style="color:var(--text-secondary);">Find answers to common questions or contact our support team.</p>
+    </div>
+
+    <!-- Quick Links -->
+    <div class="grid-3" style="gap:16px;margin-bottom:48px;">
+      <div class="card" style="text-align:center;cursor:pointer;" onclick="document.getElementById('billing-faq').scrollIntoView({behavior:'smooth'})">
+        <div style="font-size:2rem;margin-bottom:10px;">💳</div>
+        <h3 style="font-size:0.95rem;margin-bottom:6px;">Billing & Payments</h3>
+        <p style="font-size:0.8rem;color:var(--text-secondary);">Subscription, refunds, invoices</p>
+      </div>
+      <div class="card" style="text-align:center;cursor:pointer;" onclick="document.getElementById('account-faq').scrollIntoView({behavior:'smooth'})">
+        <div style="font-size:2rem;margin-bottom:10px;">👤</div>
+        <h3 style="font-size:0.95rem;margin-bottom:6px;">Account & Access</h3>
+        <p style="font-size:0.8rem;color:var(--text-secondary);">Login issues, password, profile</p>
+      </div>
+      <div class="card" style="text-align:center;cursor:pointer;" onclick="document.getElementById('engines-faq').scrollIntoView({behavior:'smooth'})">
+        <div style="font-size:2rem;margin-bottom:10px;">⚙️</div>
+        <h3 style="font-size:0.95rem;margin-bottom:6px;">Using Engines</h3>
+        <p style="font-size:0.8rem;color:var(--text-secondary);">How to use each tool</p>
+      </div>
+    </div>
+
+    <!-- FAQ Sections -->
+    <div style="display:flex;flex-direction:column;gap:40px;">
+
+      <div id="billing-faq">
+        <h2 style="font-size:1.2rem;margin-bottom:16px;padding-bottom:12px;border-bottom:1px solid var(--border);">💳 Billing & Payments</h2>
+        <div style="display:flex;flex-direction:column;gap:2px;">
+          <details class="card" style="padding:0;overflow:hidden;"><summary style="padding:16px 20px;cursor:pointer;font-weight:600;font-size:0.9rem;">My payment was deducted but plan not activated</summary><div style="padding:0 20px 16px;color:var(--text-secondary);font-size:0.85rem;line-height:1.7;">Email <a href="/cdn-cgi/l/email-protection#f685838686998482b6909f9880938582868499d89f98" style="color:var(--gold);"><span class="__cf_email__" data-cfemail="0c7f797c7c637e784c6a65627a697f787c7e63226562">[email&#160;protected]</span></a> with your payment screenshot and order ID. We resolve these within 2-4 hours.</div></details>
+          <details class="card" style="padding:0;overflow:hidden;margin-top:2px;"><summary style="padding:16px 20px;cursor:pointer;font-weight:600;font-size:0.9rem;">How do I get a refund?</summary><div style="padding:0 20px 16px;color:var(--text-secondary);font-size:0.85rem;line-height:1.7;">We offer a 3-day refund for first-time subscribers. Email <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="c0a2a9acaca9aea780a6a9aeb6a5b3b4b0b2afeea9ae">[email&#160;protected]</a>. See our <a href="refund-policy.html" style="color:var(--gold);">Refund Policy</a> for full details.</div></details>
+          <details class="card" style="padding:0;overflow:hidden;margin-top:2px;"><summary style="padding:16px 20px;cursor:pointer;font-weight:600;font-size:0.9rem;">What payment methods are accepted?</summary><div style="padding:0 20px 16px;color:var(--text-secondary);font-size:0.85rem;line-height:1.7;">UPI, Net Banking, Credit/Debit cards (Visa, Mastercard, RuPay), and digital wallets — via Cashfree.</div></details>
+          <details class="card" style="padding:0;overflow:hidden;margin-top:2px;"><summary style="padding:16px 20px;cursor:pointer;font-weight:600;font-size:0.9rem;">Does my plan auto-renew?</summary><div style="padding:0 20px 16px;color:var(--text-secondary);font-size:0.85rem;line-height:1.7;">No. Plans do not auto-renew. You must manually renew before expiry. We send email reminders 7 and 2 days before expiry.</div></details>
+        </div>
+      </div>
+
+      <div id="account-faq">
+        <h2 style="font-size:1.2rem;margin-bottom:16px;padding-bottom:12px;border-bottom:1px solid var(--border);">👤 Account & Access</h2>
+        <div style="display:flex;flex-direction:column;gap:2px;">
+          <details class="card" style="padding:0;overflow:hidden;"><summary style="padding:16px 20px;cursor:pointer;font-weight:600;font-size:0.9rem;">I forgot my password</summary><div style="padding:0 20px 16px;color:var(--text-secondary);font-size:0.85rem;line-height:1.7;">Go to <a href="../auth/login.html" style="color:var(--gold);">Login page</a>, enter your email, and click "Forgot password?" — a reset link will be sent to your inbox.</div></details>
+          <details class="card" style="padding:0;overflow:hidden;margin-top:2px;"><summary style="padding:16px 20px;cursor:pointer;font-weight:600;font-size:0.9rem;">Can I use the same account on multiple devices?</summary><div style="padding:0 20px 16px;color:var(--text-secondary);font-size:0.85rem;line-height:1.7;">Yes, your account can be logged in on multiple devices simultaneously.</div></details>
+          <details class="card" style="padding:0;overflow:hidden;margin-top:2px;"><summary style="padding:16px 20px;cursor:pointer;font-weight:600;font-size:0.9rem;">How do I delete my account?</summary><div style="padding:0 20px 16px;color:var(--text-secondary);font-size:0.85rem;line-height:1.7;">Email <a href="/cdn-cgi/l/email-protection#65161015150a171125030c0b1300161115170a4b0c0b" style="color:var(--gold);"><span class="__cf_email__" data-cfemail="790a0c0909160b0d391f10170f1c0a0d090b16571017">[email&#160;protected]</span></a> with the subject "Delete Account". We process deletion within 7 business days.</div></details>
+        </div>
+      </div>
+
+      <div id="engines-faq">
+        <h2 style="font-size:1.2rem;margin-bottom:16px;padding-bottom:12px;border-bottom:1px solid var(--border);">⚙️ Using the Engines</h2>
+        <div style="display:flex;flex-direction:column;gap:2px;">
+          <details class="card" style="padding:0;overflow:hidden;"><summary style="padding:16px 20px;cursor:pointer;font-weight:600;font-size:0.9rem;">Which engines are free?</summary><div style="padding:0 20px 16px;color:var(--text-secondary);font-size:0.85rem;line-height:1.7;">Risk Profiler and Market News are completely free. Goal Planner and Retirement require Basic+. Stock Analysis, Portfolio, and Global Events require Pro.</div></details>
+          <details class="card" style="padding:0;overflow:hidden;margin-top:2px;"><summary style="padding:16px 20px;cursor:pointer;font-weight:600;font-size:0.9rem;">Is the analysis personalized investment advice?</summary><div style="padding:0 20px 16px;color:var(--text-secondary);font-size:0.85rem;line-height:1.7;">No. All analysis is for educational purposes. We are not SEBI registered. Always consult a qualified financial advisor before making investment decisions.</div></details>
+          <details class="card" style="padding:0;overflow:hidden;margin-top:2px;"><summary style="padding:16px 20px;cursor:pointer;font-weight:600;font-size:0.9rem;">How current is the market data?</summary><div style="padding:0 20px 16px;color:var(--text-secondary);font-size:0.85rem;line-height:1.7;">Market news and stock data is refreshed every 15 minutes during market hours (9:15 AM – 3:30 PM IST, Mon–Fri).</div></details>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Contact Card -->
+    <div style="margin-top:56px;text-align:center;padding:40px;background:var(--gold-dim);border:1px solid var(--border-gold);border-radius:var(--radius-xl);">
+      <h3 style="margin-bottom:10px;">Still need help?</h3>
+      <p style="color:var(--text-secondary);margin-bottom:24px;font-size:0.9rem;">Our team replies within 24 hours on business days.</p>
+      <div styl
