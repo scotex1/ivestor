@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Profile — FinVest Pro</title>
+  <link rel="stylesheet" href="../assets/css/style.css">
+</head>
+<body>
+<nav class="navbar">
+  <a href="dashboard.html" class="navbar-logo"><div class="logo-icon">📈</div>FinVest Pro</a>
+  <div class="navbar-actions">
+    <a href="dashboard.html" class="btn btn-ghost btn-sm">← Dashboard</a>
+    <button id="logout-btn" class="btn btn-ghost btn-sm">⏏</button>
+  </div>
+</nav>
+
+<div class="layout-dashboard">
+  <aside class="sidebar">
+    <div class="sidebar-section">
+      <a href="dashboard.html" class="sidebar-link"><span class="icon">🏠</span> Dashboard</a>
+      <a href="profile.html" class="sidebar-link active"><span class="icon">👤</span> Profile</a>
+      <a href="subscription.html" class="sidebar-link"><span class="icon">💳</span> Subscription</a>
+    </div>
+  </aside>
+
+  <main class="main-content" style="max-width:680px;">
+    <div style="margin-bottom:28px;">
+      <h2 style="font-size:1.5rem;margin-bottom:4px;">My Profile</h2>
+      <p style="color:var(--text-secondary);font-size:0.88rem;">Manage your account details</p>
+    </div>
+
+    <!-- Avatar & Name -->
+    <div class="card" style="margin-bottom:24px;display:flex;align-items:center;gap:24px;flex-wrap:wrap;">
+      <div id="avatar-display" style="width:72px;height:72px;border-radius:50%;background:var(--gold-dim);border:2px solid var(--border-gold);display:flex;align-items:center;justify-content:center;font-size:1.8rem;font-weight:700;color:var(--gold);">U</div>
+      <div style="flex:1;">
+        <div style="font-size:1.2rem;font-weight:700;" id="profile-display-name">Loading...</div>
+        <div style="color:var(--text-secondary);font-size:0.88rem;" id="profile-display-email">—</div>
+        <div style="margin-top:8px;"><span class="badge badge-gold" id="profile-plan-badge">Free Plan</span></div>
+      </div>
+    </div>
+
+    <!-- Edit Profile Form -->
+    <div class="card" style="margin-bottom:24px;">
+      <h3 style="font-size:1rem;margin-bottom:20px;">Personal Information</h3>
+      <form id="profile-form" style="display:flex;flex-direction:column;gap:18px;" onsubmit="saveProfile(event)">
+        <div class="grid-2" style="gap:16px;">
+          <div class="form-group">
+            <label class="form-label">Full Name</label>
+            <input type="text" id="prof-name" class="form-input" placeholder="Your full name">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Email Address</label>
+            <input type="email" id="prof-email" class="form-input" placeholder="Email" disabled style="opacity:0.5;cursor:not-allowed;">
+            <span class="form-hint">Email cannot be changed</span>
+          </div>
+        </div>
+        <div class="grid-2" style="gap:16px;">
+          <div class="form-group">
+            <label class="form-label">Phone (Optional)</label>
+            <input type="tel" id="prof-phone" class="form-input" placeholder="+91 9876543210">
+          </div>
+          <div class="form-group">
+            <label class="form-label">City</label>
+            <input type="text" id="prof-city" class="form-input" placeholder="Mumbai, Delhi...">
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Occupation</label>
+          <select id="prof-occupation" class="form-input form-select">
+            <option value="">Select occupation</option>
+            <option>Salaried Employee</option>
+            <option>Business Owner</option>
+            <option>Freelancer / Consultant</option>
+            <option>Student</option>
+            <option>Retired</option>
+            <option>Homemaker</option>
+            <option>Other</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Annual Income Range</label>
+          <select id="prof-income" class="form-input form-select">
+            <option value="">Prefer not to say</option>
+            <option>Below ₹3 LPA</option>
+            <option>₹3–6 LPA</option>
+            <option>₹6–12 LPA</option>
+            <option>₹12–25 LPA</option>
+            <option>Above ₹25 LPA</option>
+          </select>
+        </div>
+        <button type="submit" id="save-profile-btn" class="btn btn-primary" style="align-self:flex-start;">Save Changes</button>
+      </form>
+    </div>
+
+    <!-- Password Change -->
+    <div class="card" style="margin-bottom:24px;">
+      <h3 style="font-size:1rem;margin-bottom:20px;">Change Password</h3>
+      <div style="display:flex;flex-direction:column;gap:16px;">
+        <div class="form-group">
+          <label class="form-label">New Password</label>
+          <input type="password" id="new-password" class="form-input" placeholder="New password (min. 6 chars)">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Confirm New Password</label>
+          <input type="password" id="confirm-new-password" class="form-input" placeholder="Repeat new password">
+        </div>
+        <button class="btn btn-outline" style="align-self:flex-start;" onclick="changePassword()">Update Password</button>
+      </div>
+    </div>
+
+    <!-- Danger Zone -->
+    <div class="card" style="border-color:rgba(239,68,68,0.2);">
+      <h3 style="font-size:1rem;margin-bottom:8px;color:var(--accent-red);">Danger Zone</h3>
+      <p style="color:var(--text-secondary);font-size:0.85rem;margin-bottom:16px;">Permanently delete your account and all associated data. This action cannot be undone.</p>
+      <button class="btn btn-danger btn-sm" onclick="confirmDeleteAccount()">Delete My Account</button>
+    </div>
+  </main>
+</div>
+
+<div id="toast-container" class="toast-container"></div>
+<script src="../assets/js/api.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+<script src="../assets/js/auth.js"></script>
+<script>
+document.addEventListener("DOMContentLoaded", async () => {
+  if (!requireAuth()) return;
+  const { name, email, plan } = getUserInfo();
+
+  document.getElementById("prof-name").value = name || "";
+  document.getElementById("prof-email").value = email || "";
+  document.getElementById("profile-display-name").textContent = name || "User";
+  document.getElementById("profile-display-email").textContent = email || "";
+  document.getElementById("avatar-display").textContent = (name || "U")[0].toUpperCase();
+
+  const planName = (plan || "free").charAt(0).toUpperCase() + (plan || "free").slice(1);
+  document.getElementById("profile-plan-badge").textContent = planName + " Plan";
+
+  // Load extended profile from backend
+  try {
+    const token = getStoredToken();
+    const profile = await API.getProfile(token);
+    if (profile) {
+      if (profile.phone) document.getElementById("prof-phone").value = profile.phone;
+      if (profile.city) document.getElementById("prof-city").value = profile.city;
+      if (profile.occupation) document.getElementById("prof-occupation").value = profile.occupation;
+      if (profile.income) document.getElementById("prof-income").value = profile.income;
+    }
+  } catch (e) { /* use cached */ }
+});
+
+async function saveProfile(e) {
+  e.preventDefault();
+  const btn = document.getElementById("save-profile-btn");
+  btn.innerHTML = '<span class="spinner"></span> Saving...';
+  btn.disabled = true;
+  try {
+    const token = getStoredToken();
+    await API.updateProfile({
+      name: document.getElementById("prof-name").value,
+      phone: document.getElementById("prof-phone").value,
+      city: document.getElementById("prof-city").value,
+      occupation: document.getElementById("prof-occupation").value,
+      income: document.getElementById("prof-income").value
+    }, token);
+    sessionStorage.setItem("user_name", document.getElementById("prof-name").value);
+    showToast("Profile updated successfully!", "success");
+  } catch (err) {
+    showToast("Failed to save: " + err.message, "error");
+  } finally {
+    btn.innerHTML = "Save Changes";
+    btn.disabled = false;
+  }
+}
+
+async function changePassword() {
+  const np = document.getElementById("new-password").value;
+  const cp = document.getElementById("confirm-new-password").value;
+  if (!np) { showToast("Enter a new password", "error"); return; }
+  if (np !== cp) { showToast("Passwords don't match", "error"); return; }
+  if (np.length < 6) { showToast("Password must be at least 6 characters", "error"); return; }
+  try {
+    await firebase.auth().currentUser.updatePassword(np);
+    showToast("Password updated!", "success");
+    document.getElementById("new-password").value = "";
+    document.getElementById("confirm-new-password").value = "";
+  } catch (err) {
+    showToast(err.message, "error");
+  }
+}
+
+function confirmDeleteAccount() {
+  if (confirm("Are you SURE you want to delete your account?\n\nThis will:\n• Cancel your subscription\n• Delete all your data\n• Remove your account permanently\n\nThis CANNOT be undone.")) {
+    showToast("To delete your account, email support@finvestpro.in", "info", 8000);
+  }
+}
+</script>
+</body>
+</html>
