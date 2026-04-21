@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Subscription — FinVest Pro</title>
+  <link rel="stylesheet" href="../assets/css/style.css">
+</head>
+<body>
+
+<nav class="navbar">
+  <a href="dashboard.html" class="navbar-logo"><div class="logo-icon">📈</div>FinVest Pro</a>
+  <div class="navbar-actions">
+    <a href="dashboard.html" class="btn btn-ghost btn-sm">← Dashboard</a>
+    <button id="logout-btn" class="btn btn-ghost btn-sm">⏏</button>
+  </div>
+</nav>
+
+<div class="layout-dashboard">
+  <aside class="sidebar">
+    <div class="sidebar-section">
+      <a href="dashboard.html" class="sidebar-link"><span class="icon">🏠</span> Dashboard</a>
+      <a href="profile.html" class="sidebar-link"><span class="icon">👤</span> Profile</a>
+      <a href="subscription.html" class="sidebar-link active"><span class="icon">💳</span> Subscription</a>
+    </div>
+  </aside>
+
+  <main class="main-content" style="max-width:760px;">
+
+    <div style="margin-bottom:28px;">
+      <h2 style="font-size:1.5rem;margin-bottom:4px;">Subscription & Billing</h2>
+      <p style="color:var(--text-secondary);font-size:0.88rem;">Manage your plan and payment history</p>
+    </div>
+
+    <!-- Current Plan Card -->
+    <div class="card card-gold" style="margin-bottom:24px;">
+      <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px;">
+        <div>
+          <div style="font-size:0.78rem;color:var(--text-muted);margin-bottom:6px;">CURRENT PLAN</div>
+          <h3 style="font-size:1.4rem;margin-bottom:4px;text-transform:capitalize;" id="current-plan-name">Loading...</h3>
+          <div id="plan-expiry-text" style="font-size:0.85rem;color:var(--text-secondary);"></div>
+        </div>
+        <div style="display:flex;gap:10px;flex-wrap:wrap;">
+          <a href="../pricing.html" class="btn btn-primary btn-sm">Upgrade Plan</a>
+          <button id="cancel-btn" class="btn btn-ghost btn-sm" onclick="confirmCancel()">Cancel</button>
+        </div>
+      </div>
+
+      <!-- Plan features -->
+      <div id="current-plan-features" style="margin-top:20px;padding-top:20px;border-top:1px solid var(--border-gold);"></div>
+    </div>
+
+    <!-- Plan Expiry Alert -->
+    <div id="expiry-alert" style="display:none;" class="alert alert-warning" style="margin-bottom:24px;">
+      ⚠️ Your plan is expiring soon. <a href="../pricing.html" style="color:var(--gold);font-weight:600;">Renew now →</a>
+    </div>
+
+    <!-- Payment History -->
+    <div>
+      <h3 style="font-size:1rem;margin-bottom:16px;">Payment History</h3>
+      <div class="table-wrapper">
+        <table>
+          <thead>
+            <tr>
+              <th>Order ID</th>
+              <th>Plan</th>
+              <th>Amount</th>
+              <th>Date</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody id="payment-history-body">
+            <tr><td colspan="5" style="text-align:center;padding:32px;"><span class="spinner"></span></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Disclaimer -->
+    <div style="margin-top:32px;padding:16px 20px;background:var(--bg-secondary);border-radius:var(--radius-md);border:1px solid var(--border);">
+      <p style="font-size:0.78rem;color:var(--text-muted);line-height:1.7;">
+        <strong style="color:var(--text-secondary);">Billing Note:</strong> Payments are processed securely via Cashfree.
+        Subscriptions do not auto-renew. You must manually renew before expiry.
+        For refunds, see our <a href="../legal/refund-policy.html" style="color:var(--gold);">Refund Policy</a>.
+        Contact <a href="/cdn-cgi/l/email-protection#aedddbdedec1dcdaeec8c7c0d8cbdddadedcc180c7c0" style="color:var(--gold);"><span class="__cf_email__" data-cfemail="91e2e4e1e1fee3e5d1f7f8ffe7f4e2e5e1e3febff8ff">[email&#160;protected]</span></a> for issues.
+      </p>
+    </div>
+  </main>
+</div>
+
+<div id="toast-container" class="toast-container"></div>
+
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script src="../assets/js/api.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+<script src="../assets/js/auth.js"></script>
+<script src="../assets/js/payment.js"></script>
+
+<script>
+const PLAN_FEATURES = {
+  free: ["Risk Profiler", "Market News"],
+  basic: ["Risk Profiler", "Market News", "Goal Planner", "Retirement Planner"],
+  pro: ["All 7 Engines", "Priority Support", "Advanced Analytics"],
+  elite: ["All 7 Engines", "Priority Support", "Custom Reports", "Dedicated Advisor"]
+};
+
+document.addEventListener("DOMContentLoaded", async () => {
+  if (!requireAuth()) return;
+
+  const plan = sessionStorage.getItem("plan") || "free";
+  const planName = (plan.charAt(0).toUpperCase() + plan.slice(1)) + " Plan";
+  const expiry = sessionStorage.getItem("plan_expiry");
+  const daysLeft = getDaysRemaining();
+
+  document.getElementById("current-plan-name").textContent = planName;
+
+  if (expiry) {
+    document.getElementById("plan-expiry-text").innerHTML = plan === "free"
+      ? '<span style="color:var(--accent-green);">Free forever</span>'
+      : `Expires: <strong>${formatDate(expiry)}</strong> (${daysLeft} days remaining)`;
+
+    if (daysLeft <= 7 && plan !== "free") {
+      const alert = document.getElementById("expiry-alert");
+      alert.style.display = "flex";
+    }
+  } else {
+    document.getElementById("plan-expiry-text").textContent = plan === "free" ? "Free forever" : "—";
+  }
+
+  // Features
+  const features = PLAN_FEATURES[plan] || PLAN_FEATURES.free;
+  document.getElementById("current-plan-features").innerHTML = `
+    <div style="display:flex;gap:16px;flex-wrap:wrap;">
+      ${features.map(f => `<span class="badge badge-green">✓ ${f}</span>`).join("")}
+    </div>
+  `;
+
+  // Hide cancel for free
+  if (plan === "free") {
+    document.getElementById("cancel-btn").style.display = "none";
+  }
+
+  // Load payment history
+  await loadPaymentHistory();
+});
+
+async function loadPaymentHistory() {
+  const token = getStoredToken();
+  const tbody = document.getElementById("payment-history-body");
+
+  try {
+    const data = await API.getPaymentHistory(token);
+    const payments = data?.payments || [];
+
+    if (!payments.length) {
+      tbody.innerHTML = `<tr><td colspan="5" style="text-align:center;color:var(--text-muted);padding:32px;">No payment history</td></tr>`;
+      return;
+    }
+
+    tbody.innerHTML = payments.map(p => `
+      <tr>
+        <td style="font-family:var(--font-mono);font-size:0.78rem;color:var(--text-muted);">${p.order_id}</td>
+        <td><span class="badge badge-gold">${p.plan}</span></td>
+        <td style="font-weight:600;font-family:var(--font-mono);">${formatCurrency(p.amount)}</td>
+        <td style="color:var(--text-secondary);font-size:0.85rem;">${formatDate(p.date)}</td>
+        <td><span class="badge ${p.status === 'SUCCESS' ? 'badge-green' : 'badge-red'}">${p.status}</span></td>
+      </tr>
+    `).join("");
+  } catch {
+    tbody.innerHTML = `<tr><td colspan="5" style="text-align:center;color:var(--text-muted);padding:32px;">Could not load payment history</td></tr>`;
+  }
+}
+
+function confirmCa

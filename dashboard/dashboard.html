@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard — FinVest Pro</title>
+  <link rel="stylesheet" href="../assets/css/style.css">
+</head>
+<body>
+
+<!-- Navbar -->
+<nav class="navbar">
+  <a href="dashboard.html" class="navbar-logo">
+    <div class="logo-icon">📈</div>
+    FinVest Pro
+  </a>
+
+  <div class="navbar-actions">
+    <a href="../pricing.html" class="btn btn-outline btn-sm">Upgrade Plan</a>
+    <div style="display:flex;align-items:center;gap:10px;cursor:pointer;padding:6px 10px;border-radius:var(--radius-sm);border:1px solid var(--border);" onclick="window.location.href='profile.html'">
+      <img data-user-photo src="" alt="" style="width:28px;height:28px;border-radius:50%;object-fit:cover;">
+      <span data-user-name style="font-size:0.88rem;font-weight:500;"></span>
+    </div>
+    <button id="logout-btn" class="btn btn-ghost btn-icon" title="Sign out" style="padding:8px 12px;">⏏</button>
+  </div>
+</nav>
+
+<!-- Dashboard Layout -->
+<div class="layout-dashboard">
+
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <div class="sidebar-section">
+      <div class="sidebar-label">Overview</div>
+      <a href="dashboard.html" class="sidebar-link active">
+        <span class="icon">🏠</span> Dashboard
+      </a>
+      <a href="profile.html" class="sidebar-link">
+        <span class="icon">👤</span> Profile
+      </a>
+      <a href="subscription.html" class="sidebar-link">
+        <span class="icon">💳</span> Subscription
+      </a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-label">Free Engines</div>
+      <a href="../engines/risk-profile.html" class="sidebar-link">
+        <span class="icon">📊</span> Risk Profiler
+      </a>
+      <a href="../engines/news.html" class="sidebar-link">
+        <span class="icon">📰</span> Market News
+      </a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-label">Basic Engines</div>
+      <a href="../engines/goal-planner.html" class="sidebar-link" data-engine="goal-planner">
+        <span class="icon">🎯</span> Goal Planner
+      </a>
+      <a href="../engines/retirement.html" class="sidebar-link" data-engine="retirement">
+        <span class="icon">🏖️</span> Retirement
+      </a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-label">Pro Engines</div>
+      <a href="../engines/stock-analysis.html" class="sidebar-link" data-engine="stock-analysis">
+        <span class="icon">📈</span> Stock Analysis
+      </a>
+      <a href="../engines/portfolio.html" class="sidebar-link" data-engine="portfolio">
+        <span class="icon">💼</span> Portfolio
+      </a>
+      <a href="../engines/global-events.html" class="sidebar-link" data-engine="global-events">
+        <span class="icon">🌐</span> Global Events
+      </a>
+    </div>
+
+    <!-- Upgrade CTA in Sidebar -->
+    <div style="margin-top:auto;padding:16px 12px;background:var(--gold-dim);border:1px solid var(--border-gold);border-radius:var(--radius-md);" id="sidebar-upgrade" style="display:none;">
+      <div style="font-size:0.82rem;font-weight:600;color:var(--gold);margin-bottom:6px;">Unlock All Engines</div>
+      <div style="font-size:0.75rem;color:var(--text-secondary);margin-bottom:12px;">Get Pro for ₹999/month</div>
+      <a href="../pricing.html" class="btn btn-primary btn-sm btn-full">Upgrade</a>
+    </div>
+  </aside>
+
+  <!-- Main Content -->
+  <main class="main-content">
+
+    <!-- Plan Banner -->
+    <div id="plan-banner" class="plan-banner" style="display:none;"></div>
+
+    <!-- Page Header -->
+    <div style="margin-bottom:28px;">
+      <h2 style="font-size:1.6rem;margin-bottom:4px;">
+        Good morning, <span data-user-name></span> 👋
+      </h2>
+      <p style="color:var(--text-secondary);font-size:0.9rem;">
+        Here's your financial overview for today.
+      </p>
+    </div>
+
+    <!-- Stats Row -->
+    <div id="dashboard-stats" class="grid-4" style="margin-bottom:32px;">
+      <!-- Populated by dashboard.js -->
+      <div class="stat-card skeleton" style="height:96px;"></div>
+      <div class="stat-card skeleton" style="height:96px;"></div>
+      <div class="stat-card skeleton" style="height:96px;"></div>
+      <div class="stat-card skeleton" style="height:96px;"></div>
+    </div>
+
+    <!-- Engines Section -->
+    <div style="margin-bottom:20px;display:flex;align-items:center;justify-content:space-between;">
+      <div>
+        <h3 style="font-size:1.1rem;margin-bottom:2px;">Financial Engines</h3>
+        <p style="font-size:0.82rem;color:var(--text-secondary);">Click any engine to get started</p>
+      </div>
+      <span class="badge badge-gray" id="plan-badge">
+        <span data-user-plan></span> Plan
+      </span>
+    </div>
+
+    <div id="engine-cards" class="engine-grid">
+      <!-- Populated by dashboard.js -->
+      <div class="engine-card skeleton" style="height:160px;"></div>
+      <div class="engine-card skeleton" style="height:160px;"></div>
+      <div class="engine-card skeleton" style="height:160px;"></div>
+      <div class="engine-card skeleton" style="height:160px;"></div>
+      <div class="engine-card skeleton" style="height:160px;"></div>
+      <div class="engine-card skeleton" style="height:160px;"></div>
+      <div class="engine-card skeleton" style="height:160px;"></div>
+    </div>
+
+  </main>
+</div>
+
+<!-- Upgrade Modal -->
+<div class="modal-overlay" id="upgrade-modal">
+  <div class="modal" style="text-align:center;">
+    <div style="font-size:3rem;margin-bottom:16px;">🔒</div>
+    <h3 style="margin-bottom:8px;">Premium Feature</h3>
+    <p style="color:var(--text-secondary);font-size:0.9rem;margin-bottom:6px;">
+      This engine requires <strong style="color:var(--gold);" id="required-plan-name">Basic</strong> or higher plan.
+    </p>
+    <p style="color:var(--text-muted);font-size:0.82rem;margin-bottom:28px;">
+      Upgrade now to unlock all financial engines and start investing smarter.
+    </p>
+    <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;">
+      <a href="../pricing.html" class="btn btn-primary">View Plans</a>
+      <button class="btn btn-ghost" onclick="document.getElementById('upgrade-modal').classList.remove('active')">Maybe Later</button>
+    </div>
+  </div>
+</div>
+
+<!-- Payment Success Modal -->
+<div class="modal-overlay" id="payment-success-modal">
+  <div class="modal" style="text-align:center;">
+    <div style="font-size:3rem;margin-bottom:16px;">🎉</div>
+    <h3 style="margin-bottom:8px;">Plan Activated!</h3>
+    <p style="color:var(--text-secondary);font-size:0.9rem;margin-bottom:6px;">
+      Your <strong style="color:var(--gold);" id="success-plan-name"></strong> is now active.
+    </p>
+    <p style="color:var(--text-muted);font-size:0.82rem;margin-bottom:8px;">
+      Valid until: <strong id="success-expiry"></strong>
+    </p>
+    <p style="color:var(--text-muted);font-size:0.82rem;margin-bottom:28px;">
+      Redirecting to dashboard...
+    </p>
+    <button class="btn btn-primary" onclick="window.location.reload()">Go to Dashboard</button>
+  </div>
+</div>
+
+<!-- Toast -->
+<div id="toast-container" class="toast-container"></div>
+
+<script src="../assets/js/api.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+<script src="../assets/js/auth.js"></script>
+<script src="../assets/js/payment.js"></script>
+<script src="../assets/js/dashboard.js"></script>
+<script>
+  // Load stats after dashboard init
+  document.addEventListener("DOMContentLoaded", () => {
+    setTimeout(loadDashboardStats, 800);
+  });
+</script>
+</body>
+</html>
